@@ -7,6 +7,10 @@ interface ScriptEntry {
   id: string;
   name: string;
   summary: string;
+  storeUrl: string;
+  addedAt: string;
+  order: number;
+  status: "active" | "deprecated";
   sections: Record<string, string>;
 }
 
@@ -16,14 +20,14 @@ const scriptsData = JSON.parse(fs.readFileSync(scriptsIndexPath, "utf8")) as {
   scripts: ScriptEntry[];
 };
 
-const scriptNav = scriptsData.scripts
+const scriptNav = [...scriptsData.scripts]
   .sort((left, right) => left.name.localeCompare(right.name))
   .map((script) => ({
     text: script.name,
     link: `/${script.sections.readme.replace(/\\.md$/, "")}`
   }));
 
-const scriptSidebar = scriptsData.scripts
+const scriptSidebar = [...scriptsData.scripts]
   .sort((left, right) => left.name.localeCompare(right.name))
   .flatMap((script) => {
     const basePath = `/scripts/${script.id}/`;
@@ -44,16 +48,16 @@ const scriptSidebar = scriptsData.scripts
 
 export default defineConfig({
   title: "MetaDen Scripts",
-  description: "Documentation hub for FiveM scripts.",
+  description: "Engineered for immersive roleplay. Built to scale.",
   cleanUrls: true,
   ignoreDeadLinks: false,
   themeConfig: {
     logo: "/mdscripts.png",
     nav: [
       { text: "Home", link: "/" },
-      { text: "Scripts", link: "/scripts/" },
-      { text: "Accessibility", link: "/accessibility" },
-      { text: "Contributing", link: "/contributing" },
+      { text: "Documentation", link: "/scripts/" },
+      { text: "Store", link: "https://metadenscripts.tebex.io/" },
+      { text: "Discord", link: "https://discord.gg/BPADZYQA9v" },
       {
         text: "Script Index",
         items: scriptNav

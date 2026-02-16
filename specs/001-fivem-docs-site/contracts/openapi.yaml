@@ -73,7 +73,7 @@ components:
   schemas:
     Script:
       type: object
-      required: [id, name, order, status]
+      required: [id, name, storeUrl, addedAt, order, status]
       properties:
         id:
           type: string
@@ -81,6 +81,12 @@ components:
           type: string
         summary:
           type: string
+        storeUrl:
+          type: string
+          format: uri
+        addedAt:
+          type: string
+          format: date
         order:
           type: integer
         status:

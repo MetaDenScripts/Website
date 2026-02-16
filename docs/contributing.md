@@ -27,3 +27,12 @@ npm run test:unit
 ```
 
 If you add new script docs, update `docs/scripts/_meta/scripts-index.json`.
+
+## Script Metadata Requirements
+
+Each script entry in `docs/scripts/_meta/scripts-index.json` must include:
+
+- `id`, `name`, `summary`
+- `storeUrl`: public store/product URL for the script
+- `addedAt`: ISO date (`YYYY-MM-DD`) used for latest-scripts ordering
+- `order`, `status`, and all required `sections`

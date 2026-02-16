@@ -4,6 +4,8 @@
       "id": "vehicle-keys",
       "name": "Vehicle Keys",
       "summary": "Locking, key-sharing, and ownership interactions for vehicles.",
+      "storeUrl": "https://store.metadenscripts.com/vehicle-keys",
+      "addedAt": "2026-01-15",
       "order": 1,
       "status": "active",
       "sections": {
@@ -17,6 +19,8 @@
       "id": "police-tools",
       "name": "Police Tools",
       "summary": "Workflow and command helpers for police roleplay interactions.",
+      "storeUrl": "https://store.metadenscripts.com/police-tools",
+      "addedAt": "2026-02-10",
       "order": 2,
       "status": "active",
       "sections": {

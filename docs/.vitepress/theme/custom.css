@@ -259,3 +259,109 @@ a:hover {
   color: var(--vp-c-text-2);
   /* font-weight: 500; */
 }
+
+.latest-scripts-section {
+  margin-top: 2.5rem;
+}
+
+.script-card-grid.latest-scripts-grid {
+  list-style: none;
+  padding: 0;
+}
+
+.script-card-grid.latest-scripts-grid > li {
+  list-style: none;
+  margin: 0;
+}
+
+.script-card-grid.latest-scripts-grid > li::marker {
+  content: "";
+}
+
+.vp-doc .script-card-grid.latest-scripts-grid li + li {
+  margin-top: 0;
+}
+
+.latest-script-card {
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+
+.latest-script-card::before,
+.latest-script-card .box::before {
+  content: none !important;
+}
+
+.latest-script-card > article {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.latest-script-card h3 {
+  margin: 0 0 0.5rem;
+}
+
+.latest-script-card p {
+  margin: 0 0 0.85rem;
+}
+
+.latest-script-card .title {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.latest-script-card .details {
+  margin: 0 0 0.85rem;
+  color: var(--vp-c-text-2);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.latest-script-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.latest-script-card-actions a {
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  text-decoration: none;
+}
+
+.latest-script-card-actions a:focus-visible {
+  border-color: var(--vp-c-brand-1);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--vp-c-brand-1) 30%, transparent);
+}
+
+.script-card a,
+.script-card a:hover,
+.script-card a:focus,
+.script-card a:visited,
+.latest-script-card a,
+.latest-script-card a:hover,
+.latest-script-card a:focus,
+.latest-script-card a:visited {
+  text-decoration: none !important;
+}
+
+@media (min-width: 768px) {
+  .script-card-grid.latest-scripts-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .script-card-grid.latest-scripts-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.vp-doc h2 {
+   border-top: none;
+}

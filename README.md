@@ -35,3 +35,11 @@ Each script under `docs/scripts/<script-id>/` includes:
 - `changelog.md`
 
 Update `docs/scripts/_meta/scripts-index.json` when adding a script.
+
+## Latest Scripts on Homepage
+
+Homepage cards are generated from `docs/scripts/_meta/scripts-index.json` and sorted by newest `addedAt` value.
+Each script entry should include:
+
+- `storeUrl` (external store page)
+- `addedAt` (ISO date `YYYY-MM-DD`)

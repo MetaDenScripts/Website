@@ -7,11 +7,11 @@ hero:
   tagline: Engineered for immersive roleplay. Built to scale.
   actions:
     - theme: brand
-      text: Browse Scripts
-      link: /scripts/
+      text: View Scripts
+      link: https://metadenscripts.tebex.io/
     - theme: alt
-      text: Contributing Guide
-      link: /contributing
+      text: Documentation
+      link: /scripts/
 
 features:
   - title: Framework-Ready Architecture
@@ -21,3 +21,7 @@ features:
   - title: Optimized for Scale
     details: Clean, efficient code built to perform under load and grow with your server.
 ---
+
+<!-- markdownlint-disable MD033 -->
+<LatestScriptsGrid />
+<!-- markdownlint-enable MD033 -->

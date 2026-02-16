@@ -1,5 +1,20 @@
 import { expect, test } from "@playwright/test";
 
+test("homepage shows latest scripts cards with store and docs links", async ({ page }) => {
+  await page.goto("/");
+
+  await expect(page.getByRole("heading", { name: "Latest Scripts" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Police Tools" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Vehicle Keys" })).toBeVisible();
+
+  const policeCard = page.locator(".latest-script-card", {
+    has: page.getByRole("heading", { name: "Police Tools" })
+  });
+
+  await expect(policeCard.getByRole("link", { name: "Store" })).toBeVisible();
+  await expect(policeCard.getByRole("link", { name: "Documentation" })).toBeVisible();
+});
+
 test("script pages expose all required sections", async ({ page }) => {
   await page.goto("/scripts/");
 
