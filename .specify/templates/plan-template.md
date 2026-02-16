@@ -31,7 +31,19 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- Script-first IA: Does the feature preserve top-level navigation by script and include API,
+  README, config examples, and changelog access for affected scripts?
+- Markdown source: Does the feature keep Markdown as the source of truth and render it
+  without manual HTML-only authoring requirements?
+- Accessibility: Are semantic structure, keyboard navigation, and contrast expectations
+  defined and testable for changed UI surfaces?
+- Completeness: Will affected scripts remain complete across all mandatory documentation
+  sections after delivery?
+- GitHub Pages fit: Is the solution static-friendly and deployable without mandatory
+  server-side runtime?
+
+If any gate fails, document the reason under Complexity Tracking and obtain explicit approval
+before implementation.
 
 ## Project Structure
 

@@ -1,0 +1,25 @@
+{
+  "name": "metadenscripts-docs",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Documentation website for MetaDenScripts FiveM resources.",
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "check:content": "node scripts/check-content.mjs",
+    "lint:markdown": "markdownlint-cli2 \"docs/**/*.md\"",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
+    "test": "npm run test:unit && npm run test:e2e"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "@types/node": "^22.13.10",
+    "markdownlint-cli2": "^0.18.1",
+    "typescript": "^5.8.2",
+    "vitepress": "^1.6.3",
+    "vitest": "^3.0.8"
+  }
+}

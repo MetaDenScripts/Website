@@ -72,8 +72,11 @@
   Fill them out with the right edge cases.
 -->
 
-- What happens when [boundary condition]?
-- How does system handle [error scenario]?
+- What happens when a script is missing one mandatory section (API, README, config examples,
+  changelog)?
+- How does the system handle malformed or unsupported Markdown content?
+- How does navigation behave when there are many scripts with long names?
+- How does the UI behave for keyboard-only users and screen readers?
 
 ## Requirements *(mandatory)*
 
@@ -84,11 +87,13 @@
 
 ### Functional Requirements
 
-- **FR-001**: System MUST [specific capability, e.g., "allow users to create accounts"]
-- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]  
-- **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
-- **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
-- **FR-005**: System MUST [behavior, e.g., "log all security events"]
+- **FR-001**: System MUST organize documentation navigation by script.
+- **FR-002**: Each script area MUST expose API documentation, README, configuration examples,
+  and changelog sections.
+- **FR-003**: System MUST render Markdown content for documentation pages.
+- **FR-004**: System MUST provide accessible navigation and readable content structure,
+  including keyboard support and semantic headings.
+- **FR-005**: System MUST remain compatible with static deployment on GitHub Pages.
 
 *Example of marking unclear requirements:*
 
@@ -109,7 +114,10 @@
 
 ### Measurable Outcomes
 
-- **SC-001**: [Measurable metric, e.g., "Users can complete account creation in under 2 minutes"]
-- **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
-- **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
-- **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
+- **SC-001**: Users can navigate from the homepage to any script and its required four
+  sections in three interactions or fewer.
+- **SC-002**: 100% of documentation pages in scope are rendered from Markdown sources without
+  missing content blocks.
+- **SC-003**: Keyboard-only users can reach all primary navigation and in-page links in
+  acceptance testing.
+- **SC-004**: Accessibility and structure checks pass for all changed pages before release.

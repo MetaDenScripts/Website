@@ -1,0 +1,23 @@
+# Node / TypeScript
+node_modules/
+dist/
+build/
+*.log
+.env*
+
+# Test artifacts
+coverage/
+playwright-report/
+test-results/
+
+# VitePress output
+docs/.vitepress/dist/
+docs/.vitepress/cache/
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+.vscode/
+.idea/

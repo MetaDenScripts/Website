@@ -1,0 +1,30 @@
+{
+  "scripts": [
+    {
+      "id": "vehicle-keys",
+      "name": "Vehicle Keys",
+      "summary": "Locking, key-sharing, and ownership interactions for vehicles.",
+      "order": 1,
+      "status": "active",
+      "sections": {
+        "api": "scripts/vehicle-keys/api.md",
+        "readme": "scripts/vehicle-keys/readme.md",
+        "config-examples": "scripts/vehicle-keys/config-examples.md",
+        "changelog": "scripts/vehicle-keys/changelog.md"
+      }
+    },
+    {
+      "id": "police-tools",
+      "name": "Police Tools",
+      "summary": "Workflow and command helpers for police roleplay interactions.",
+      "order": 2,
+      "status": "active",
+      "sections": {
+        "api": "scripts/police-tools/api.md",
+        "readme": "scripts/police-tools/readme.md",
+        "config-examples": "scripts/police-tools/config-examples.md",
+        "changelog": "scripts/police-tools/changelog.md"
+      }
+    }
+  ]
+}

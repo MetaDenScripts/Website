@@ -1,0 +1,261 @@
+:root {
+  --vp-c-brand-1: #5b8cff;
+  --vp-c-brand-2: #7aa0ff;
+  --vp-c-brand-3: #4f7cf2;
+}
+
+.skip-link {
+  left: 0;
+  padding: 0.75rem 1rem;
+  position: absolute;
+  top: -200px;
+  z-index: 1000;
+  border-radius: 0 0 0.5rem 0;
+  background: var(--vp-c-brand-1);
+  color: var(--vp-c-bg);
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+:focus-visible {
+  outline: 3px solid var(--vp-c-brand-1);
+  outline-offset: 2px;
+}
+
+.script-card-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin-top: 1.5rem;
+}
+
+.script-card {
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+
+.script-card h3 {
+  margin: 0 0 0.5rem;
+}
+
+
+/* ========================================
+   MD BRAND COLORS
+======================================== */
+
+:root {
+  --vp-c-brand-1: #00d4ff;
+  --vp-c-brand-2: #7c5cff;
+  --vp-c-brand-3: #ff4fd8;
+}
+
+/* ========================================
+   LIGHT MODE
+======================================== */
+
+:root {
+  --vp-c-bg: #f8faff;
+  --vp-c-bg-soft: #ffffff;
+  --vp-c-bg-mute: #f1f4ff;
+
+  --vp-c-text-1: #1a1f36;
+  --vp-c-text-2: #4c5573;
+
+  --vp-c-divider: rgba(0, 0, 0, 0.08);
+}
+
+/* ========================================
+   DARK MODE
+======================================== */
+
+.dark {
+  --vp-c-bg: #0b0f1a;
+  --vp-c-bg-soft: #11172a;
+  --vp-c-bg-mute: #0f1424;
+
+  --vp-c-text-1: #ffffff;
+  --vp-c-text-2: #b8c0ff;
+
+  --vp-c-divider: rgba(255, 255, 255, 0.08);
+}
+
+/* ========================================
+   Background Glow (Dark Only)
+======================================== */
+
+.dark body {
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(0, 212, 255, 0.08),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(255, 79, 216, 0.08),
+      transparent 40%
+    ),
+    var(--vp-c-bg);
+}
+
+/* ========================================
+   Ensure Text Uses Theme Variables
+======================================== */
+
+body {
+  color: var(--vp-c-text-1);
+}
+
+p, li, span {
+  color: var(--vp-c-text-1);
+}
+
+/* ========================================
+   Headings
+======================================== */
+
+.dark h1 {
+  background: linear-gradient(90deg, #00d4ff, #ff4fd8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dark h2 {
+  background: linear-gradient(90deg, #00d4ff, #7c5cff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Light mode headings normal */
+h1, h2 {
+  color: var(--vp-c-text-1);
+}
+
+/* ========================================
+   Script Cards
+======================================== */
+
+.script-card-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  margin-top: 1.5rem;
+}
+
+.script-card {
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.dark .script-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--vp-c-brand-1);
+  box-shadow:
+    0 0 20px rgba(0, 212, 255, 0.2),
+    0 0 40px rgba(255, 79, 216, 0.15);
+}
+
+.script-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    #00d4ff,
+    #7c5cff,
+    #ff4fd8
+  );
+}
+
+/* ========================================
+   Buttons
+======================================== */
+
+.button-primary,
+a.button-primary {
+  display: inline-block;
+  background: linear-gradient(
+    90deg,
+    #00d4ff,
+    #7c5cff,
+    #ff4fd8
+  );
+  color: #fff;
+  border: none;
+  padding: 0.65rem 1.2rem;
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.button-primary:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 15px rgba(0, 212, 255, 0.4),
+    0 0 30px rgba(255, 79, 216, 0.25);
+}
+
+/* ========================================
+   Links
+======================================== */
+
+a {
+  color: var(--vp-c-brand-1);
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--vp-c-brand-3);
+}
+
+/* ========================================
+   HERO HEADING
+======================================== */
+
+/* .heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+} */
+
+.heading .name {
+  /* font-size: 2.8rem; */
+  /* font-weight: 800;
+  letter-spacing: -0.5px; */
+}
+
+/* Gradient only in dark mode */
+.dark .heading .name {
+  background: linear-gradient(
+    90deg,
+    #00d4ff 0%,
+    #7c5cff 50%,
+    #ff4fd8 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Light mode — cleaner, premium */
+.heading .name {
+  color: var(--vp-c-text-1);
+}
+
+.heading .text {
+  /* font-size: 1.1rem; */
+  color: var(--vp-c-text-2);
+  /* font-weight: 500; */
+}

@@ -1,0 +1,120 @@
+openapi: 3.0.3
+info:
+  title: MetaDenScripts Documentation Content API
+  version: 1.0.0
+  description: >-
+    Contract for documentation content and navigation resources used by the static
+    docs site build/runtime layer.
+servers:
+  - url: https://metadenscripts.github.io
+paths:
+  /api/scripts:
+    get:
+      summary: List documented scripts
+      operationId: listScripts
+      responses:
+        '200':
+          description: Scripts returned successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Script'
+  /api/scripts/{scriptId}:
+    get:
+      summary: Get one script and completeness status
+      operationId: getScript
+      parameters:
+        - name: scriptId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Script returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScriptDetail'
+        '404':
+          description: Script not found
+  /api/scripts/{scriptId}/sections/{sectionType}:
+    get:
+      summary: Get rendered section content metadata
+      operationId: getScriptSection
+      parameters:
+        - name: scriptId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: sectionType
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [api, readme, config-examples, changelog]
+      responses:
+        '200':
+          description: Section returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentationSection'
+        '404':
+          description: Script or section not found
+components:
+  schemas:
+    Script:
+      type: object
+      required: [id, name, order, status]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        summary:
+          type: string
+        order:
+          type: integer
+        status:
+          type: string
+          enum: [active, deprecated]
+    ScriptDetail:
+      allOf:
+        - $ref: '#/components/schemas/Script'
+        - type: object
+          required: [sections, isComplete]
+          properties:
+            isComplete:
+              type: boolean
+            sections:
+              type: array
+              items:
+                $ref: '#/components/schemas/DocumentationSection'
+    DocumentationSection:
+      type: object
+      required: [scriptId, sectionType, title, sourcePath, hasContent]
+      properties:
+        scriptId:
+          type: string
+        sectionType:
+          type: string
+          enum: [api, readme, config-examples, changelog]
+        title:
+          type: string
+        sourcePath:
+          type: string
+        hasContent:
+          type: boolean
+        renderedHtml:
+          type: string
+        lastUpdated:
+          type: string
+          format: date-time

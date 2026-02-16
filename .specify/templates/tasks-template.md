@@ -49,8 +49,8 @@ description: "Task list template for feature implementation"
 **Purpose**: Project initialization and basic structure
 
 - [ ] T001 Create project structure per implementation plan
-- [ ] T002 Initialize [language] project with [framework] dependencies
-- [ ] T003 [P] Configure linting and formatting tools
+- [ ] T002 Initialize documentation site stack and static build configuration
+- [ ] T003 [P] Configure linting/formatting and Markdown processing pipeline
 
 ---
 
@@ -62,12 +62,12 @@ description: "Task list template for feature implementation"
 
 Examples of foundational tasks (adjust based on your project):
 
-- [ ] T004 Setup database schema and migrations framework
-- [ ] T005 [P] Implement authentication/authorization framework
-- [ ] T006 [P] Setup API routing and middleware structure
-- [ ] T007 Create base models/entities that all stories depend on
-- [ ] T008 Configure error handling and logging infrastructure
-- [ ] T009 Setup environment configuration management
+- [ ] T004 Implement script-first navigation model and shared route conventions
+- [ ] T005 [P] Implement Markdown rendering service/components
+- [ ] T006 [P] Implement shared accessibility primitives (landmarks, heading order, focus)
+- [ ] T007 Create reusable content template for API/README/config/changelog sections
+- [ ] T008 Configure static-site build and GitHub Pages compatibility checks
+- [ ] T009 Setup content validation for missing required script sections
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -88,12 +88,12 @@ Examples of foundational tasks (adjust based on your project):
 
 ### Implementation for User Story 1
 
-- [ ] T012 [P] [US1] Create [Entity1] model in src/models/[entity1].py
-- [ ] T013 [P] [US1] Create [Entity2] model in src/models/[entity2].py
-- [ ] T014 [US1] Implement [Service] in src/services/[service].py (depends on T012, T013)
-- [ ] T015 [US1] Implement [endpoint/feature] in src/[location]/[file].py
-- [ ] T016 [US1] Add validation and error handling
-- [ ] T017 [US1] Add logging for user story 1 operations
+- [ ] T012 [P] [US1] Build script index/navigation UI in src/[location]/[file]
+- [ ] T013 [P] [US1] Add script page scaffold with required section slots in src/[location]/[file]
+- [ ] T014 [US1] Wire Markdown content loading/rendering for script sections in src/[location]/[file]
+- [ ] T015 [US1] Add validation for missing required documentation sections
+- [ ] T016 [US1] Verify keyboard navigation and semantic heading structure
+- [ ] T017 [US1] Add changelog ordering and display behavior
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
@@ -150,11 +150,11 @@ Examples of foundational tasks (adjust based on your project):
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] TXXX [P] Documentation updates in docs/
+- [ ] TXXX [P] Documentation updates for changed scripts and sections
 - [ ] TXXX Code cleanup and refactoring
-- [ ] TXXX Performance optimization across all stories
-- [ ] TXXX [P] Additional unit tests (if requested) in tests/unit/
-- [ ] TXXX Security hardening
+- [ ] TXXX Accessibility validation pass across all changed pages
+- [ ] TXXX [P] Additional tests (if requested) in tests/
+- [ ] TXXX Verify static deployment readiness for GitHub Pages
 - [ ] TXXX Run quickstart.md validation
 
 ---

@@ -1,0 +1,10 @@
+{
+  "config": {
+    "default": true,
+    "line-length": false,
+    "first-line-heading": false,
+    "no-inline-html": false,
+    "MD033": false
+  },
+  "globs": ["docs/**/*.md"]
+}
