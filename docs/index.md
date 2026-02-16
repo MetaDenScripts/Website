@@ -3,8 +3,8 @@ layout: home
 
 hero:
   name: MetaDen Scripts
-  text: FiveM Documentation Hub
-  tagline: Clear, markdown-first documentation for every script in one place.
+  text: 
+  tagline: Engineered for immersive roleplay. Built to scale.
   actions:
     - theme: brand
       text: Browse Scripts
@@ -14,10 +14,10 @@ hero:
       link: /contributing
 
 features:
-  - title: Script-First Navigation
-    details: Find docs by script with predictable section layout.
-  - title: Markdown Source of Truth
-    details: Author docs in markdown and render consistently across pages.
-  - title: Accessibility Focused
-    details: Keyboard-friendly navigation and semantic document structure.
+  - title: Framework-Ready Architecture
+    details: Seamless support for ESX, QBCore, standalone setups, and cross-framework environments.
+  - title: Built for Real Roleplay
+    details: Systems designed around actual server workflows — jobs, inventories, permissions, and player progression.
+  - title: Optimized for Scale
+    details: Clean, efficient code built to perform under load and grow with your server.
 ---
