@@ -50,7 +50,7 @@ export default defineConfig({
   title: "MetaDen Scripts",
   description: "Engineered for immersive roleplay. Built to scale.",
   cleanUrls: true,
-  ignoreDeadLinks: false,
+  ignoreDeadLinks: true,
   themeConfig: {
     logo: "/mdscripts.png",
     nav: [

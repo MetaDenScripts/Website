@@ -1,6 +1,7 @@
 # Data Model: FiveM Scripts Documentation Website
 
 ## Entity: Script
+
 - Description: A documented FiveM script represented in top-level navigation.
 - Fields:
   - `id` (string, required): Unique stable identifier used in routes and content paths.
@@ -16,6 +17,7 @@
   - `active` → `deprecated` when script is no longer maintained.
 
 ## Entity: DocumentationSection
+
 - Description: Required content segment inside each script.
 - Fields:
   - `scriptId` (string, required): Foreign key to Script.
@@ -30,6 +32,7 @@
   - If `hasContent = false`, UI MUST expose a clear missing-section state.
 
 ## Entity: ChangelogEntry
+
 - Description: A versioned change note within a script changelog section.
 - Fields:
   - `scriptId` (string, required): Foreign key to Script.
@@ -42,6 +45,7 @@
   - `version` MUST be non-empty.
 
 ## Entity: NavigationItem
+
 - Description: UI node used in global or per-script navigation.
 - Fields:
   - `id` (string, required): Unique nav item id.
@@ -54,10 +58,12 @@
   - `section` items MUST reference a valid script parent.
 
 ## Relationships
+
 - Script 1 → 4 required DocumentationSection records (one per required section type).
 - Script 1 → many ChangelogEntry records.
 - Script 1 → many NavigationItem records via section items.
 
 ## Derived Views
+
 - Script completeness view: boolean per script indicating all required sections present.
 - Accessibility audit view: list of routes/pages requiring semantic or keyboard verification.

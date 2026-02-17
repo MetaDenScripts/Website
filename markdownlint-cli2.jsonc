@@ -4,7 +4,12 @@
     "line-length": false,
     "first-line-heading": false,
     "no-inline-html": false,
-    "MD033": false
+    "MD033": false,
+    "MD041": false,
+    "MD042": false,
+    "MD043": false,
+    "MD044": false,
+    "MD045": false
   },
-  "globs": ["docs/**/*.md"]
+  "globs": ["docs/**/*.md", "specs/**/*.md"]
 }

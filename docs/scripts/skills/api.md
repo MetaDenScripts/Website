@@ -149,11 +149,11 @@ Payload shape:
 
 ```lua
 {
-	identifier = string,
-	skill = string,
-	experience = number,
-	level = number,
-	nextLevelExp = number
+ identifier = string,
+ skill = string,
+ experience = number,
+ level = number,
+ nextLevelExp = number
 }
 ```
 
@@ -201,7 +201,7 @@ To disable the command entirely:
 
 ```lua
 Config.MilestonesUi = {
-	EnableStandaloneCommand = false,
-	StandaloneCommandName = 'milestones'
+ EnableStandaloneCommand = false,
+ StandaloneCommandName = 'milestones'
 }
 ```

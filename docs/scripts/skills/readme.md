@@ -22,7 +22,6 @@ Player skills, milestones UI, and reputation/levels.
 - `oxmysql`
 - `metabridge`
 
-
 ## Installation
 
 1. Place `metaden-skills` in your resources folder.
@@ -65,12 +64,11 @@ Edit `config.lua`:
 
 ```lua
 Config.Levels = {
-	[1] = 100,
-	[2] = 250,
-	[3] = 500,
-	-- ...
+ [1] = 100,
+ [2] = 250,
+ [3] = 500,
+ -- ...
 }
 ```
 
 When a player reaches the highest configured level, `nextLevelExp` is `0`.
-

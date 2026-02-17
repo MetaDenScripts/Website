@@ -19,7 +19,6 @@ Optional integrations:
 
 - `metaden-skills` (only used when `Config.UseMetaDenSkills = true`)
 
-
 ## Installation
 
 1. Place this folder in your resources.
@@ -52,7 +51,6 @@ Main keys:
 - `Config.AnimalChance`, `Config.AnimalItems` – random creature reward configuration.
 - `Config.MinToGet`, `Config.MaxToGet` – min/max item amounts for gather rewards.
 - `Config.Recipes` – cookable recipes (`name`, `title`, `duration`, `cooking`, `required`).
-
 
 ### External events triggered by this resource
 

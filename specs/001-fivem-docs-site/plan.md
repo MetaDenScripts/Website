@@ -38,6 +38,7 @@ script documentation quickly without changing platform architecture.
 - GitHub Pages fit: PASS — output is static and deployable through GitHub Pages workflow.
 
 **Post-Design Re-check (after Phase 1 outputs)**
+
 - Script-first IA: PASS — confirmed in data model and API contract resources.
 - Markdown source: PASS — confirmed in section schema and quickstart validation steps.
 - Accessibility: PASS — confirmed by planned test matrix and quickstart checks.

@@ -9,8 +9,8 @@
 
 ```json
 {
-	"fileName": "string",
-	"content": { "ops": [] }
+ "fileName": "string",
+ "content": { "ops": [] }
 }
 ```
 
@@ -26,8 +26,8 @@
 
 ```json
 [
-	{ "file_name": "shopping" },
-	{ "file_name": "todo" }
+ { "file_name": "shopping" },
+ { "file_name": "todo" }
 ]
 ```
 
@@ -38,7 +38,7 @@
 
 ```json
 {
-	"fileName": "string"
+ "fileName": "string"
 }
 ```
 
@@ -47,7 +47,7 @@
 
 ```json
 {
-	"content": { "ops": [] }
+ "content": { "ops": [] }
 }
 ```
 
@@ -58,7 +58,7 @@
 
 ```json
 {
-	"fileName": "string"
+ "fileName": "string"
 }
 ```
 
@@ -96,4 +96,3 @@
 ### Exports
 
 - No public exports are currently provided by this resource.
-
