@@ -39,7 +39,7 @@ const scriptSidebar = [...scriptsData.scripts]
         items: [
           { text: "README", link: `${basePath}readme` },
           { text: "API", link: `${basePath}api` },
-          { text: "Config Examples", link: `${basePath}config-examples` },
+          { text: "Config", link: `${basePath}config-examples` },
           { text: "Changelog", link: `${basePath}changelog` }
         ]
       }
@@ -79,9 +79,9 @@ export default defineConfig({
   },
   markdown: {
     lineNumbers: true,
-    // theme: {
-    //   light: 'github-light-default',
-    //   dark: 'github-dark-default'
-    // }
+    theme: {
+      light: "one-light",
+      dark: "catppuccin-mocha"
+    }
   }
 });

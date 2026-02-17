@@ -2,6 +2,19 @@
   --vp-c-brand-1: #5b8cff;
   --vp-c-brand-2: #7aa0ff;
   --vp-c-brand-3: #4f7cf2;
+  --vp-layout-max-width: 100%;
+  --vp-content-max-width: 1240px;
+}
+
+@media (min-width: 960px) {
+  .VPNavBar.has-sidebar .content,
+  .VPNavBar.has-sidebar .divider {
+    padding-left: 0;
+  }
+
+  .VPSidebar {
+    left: 0;
+  }
 }
 
 .skip-link {
@@ -40,6 +53,31 @@
 
 .script-card h3 {
   margin: 0 0 0.5rem;
+}
+
+.script-card h2 {
+  margin: 0 0 0.5rem;
+}
+
+.script-card-sections {
+  display: block;
+  list-style: disc;
+  margin: 0.75rem 0 0;
+  padding-left: 1.25rem;
+}
+
+.script-card-sections li,
+.script-card-sections li + li {
+  margin: 0;
+}
+
+.script-card-sections li + li {
+  margin-top: 0.35rem;
+}
+
+.script-card-sections a {
+  display: inline;
+  padding: 0;
 }
 
 
@@ -81,6 +119,12 @@
   --vp-c-text-2: #b8c0ff;
 
   --vp-c-divider: rgba(255, 255, 255, 0.08);
+
+  --vp-code-block-bg: #0f172d;
+  --vp-code-block-divider-color: rgba(124, 92, 255, 0.25);
+  --vp-code-line-highlight-color: rgba(0, 212, 255, 0.08);
+  --vp-code-line-number-color: #6f7bb0;
+  --vp-code-line-number-active-color: #c6d1ff;
 }
 
 /* ========================================
@@ -364,4 +408,14 @@ a:hover {
 
 .vp-doc h2 {
    border-top: none;
+}
+
+@media (min-width: 960px) {
+  .VPDoc.has-aside .content-container {
+    max-width: 800px !important;
+  }
+
+  .VPDoc:not(.has-sidebar) .content-container {
+    max-width: 800px;
+  }
 }
