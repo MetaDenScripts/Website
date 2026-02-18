@@ -47,7 +47,7 @@ const scriptSidebar = [...scriptsData.scripts]
   });
 
 export default defineConfig({
-  base: "/Website/",
+  // base: "/Website/",
   title: "MetaDen Scripts",
   description: "Engineered for immersive roleplay. Built to scale.",
   cleanUrls: true,
