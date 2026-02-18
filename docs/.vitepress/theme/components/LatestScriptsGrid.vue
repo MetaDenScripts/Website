@@ -15,6 +15,13 @@ const cards = getLatestScripts(scriptsIndex.scripts as ScriptIndexItem[], 16);
     <ul v-else class="script-card-grid latest-scripts-grid" role="list">
       <li v-for="card in cards" :key="card.id" class="script-card latest-script-card">
         <article :aria-labelledby="`latest-script-${card.id}`">
+          <img
+            v-if="card.imageUrl"
+            :src="card.imageUrl"
+            :alt="`${card.name} preview image`"
+            class="latest-script-card-image"
+            style="width: 100%; height: 160px; object-fit: cover; border-radius: 8px 8px 0 0; margin-bottom: 0.5rem;"
+          />
           <h2 :id="`latest-script-${card.id}`" class="title">{{ card.name }}</h2>
           <p class="details">{{ card.summary }}</p>
           <div class="latest-script-card-actions">

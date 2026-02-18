@@ -8,6 +8,7 @@
       "addedAt": "2026-01-15",
       "order": 1,
       "status": "active",
+      "imageUrl": "/scripts-images/outdoors.png",
       "sections": {
         "api": "scripts/outdoors/api.md",
         "readme": "scripts/outdoors/readme.md",
@@ -23,6 +24,7 @@
       "addedAt": "2026-02-10",
       "order": 2,
       "status": "active",
+      "imageUrl": "/scripts-images/skills.png",
       "sections": {
         "api": "scripts/skills/api.md",
         "readme": "scripts/skills/readme.md",
@@ -38,6 +40,7 @@
       "addedAt": "2026-02-17",
       "order": 3,
       "status": "active",
+      "imageUrl": "/scripts-images/notepad.png",
       "sections": {
         "api": "scripts/notepad/api.md",
         "readme": "scripts/notepad/readme.md",

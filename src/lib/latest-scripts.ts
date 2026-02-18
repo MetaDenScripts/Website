@@ -7,6 +7,7 @@ export interface LatestScriptCard {
   storeUrl: string;
   addedAt: string;
   docsUrl: string;
+  imageUrl?: string;
 }
 
 export function toDocumentationLink(script: ScriptIndexItem): string {
@@ -34,6 +35,7 @@ export function getLatestScripts(
       summary: script.summary,
       storeUrl: script.storeUrl,
       addedAt: script.addedAt,
-      docsUrl: toDocumentationLink(script)
+      docsUrl: toDocumentationLink(script),
+      imageUrl: script.imageUrl
     }));
 }
