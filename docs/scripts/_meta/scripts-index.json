@@ -49,7 +49,7 @@
       }
     },
     {
-      "id": "metadenbridge",
+      "id": "metabridge",
       "name": "MetaBridge",
       "summary": "Bridge framework for MetaDen scripts.",
       "storeUrl": "https://store.metadenscripts.com/package/metabridge",
