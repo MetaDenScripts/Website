@@ -2,6 +2,17 @@
 
 All notable changes to this project are documented in this file.
 
+## [1.1.1] - 2026-02-22
+
+### Changed
+
+- XP admin command now enforces `Config.AdminCommand.Ace` at runtime in addition to restricted command ACE checks.
+- README permission examples updated to include both `command.skillexp` and `metaden-skills.admin` grants.
+- Reworked README structure for operators and developers (setup, config map, troubleshooting).
+- Expanded API reference to include all public exports, events, RPC handlers, and NUI callbacks.
+- Removed NPWD references from documentation and standardized integration guidance to lb-phone + standalone command modes.
+- Added permission caveat documentation for command ACE behavior (`command.<name>` restricted command semantics).
+
 ## [1.1.0] - 2026-02-16
 
 ### Added

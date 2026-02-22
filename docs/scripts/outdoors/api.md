@@ -1,74 +1,74 @@
 # Outdoors API Reference
 
-### Callbacks (server)
+## Callbacks (server)
 
 - `metaden-outdoors:server:requestNonce`
-	- Registered through bridge callback support when available.
-	- Params: `(action: string)`
-	- Returns: `nonce: string | nil`
-	- Allowed actions: `cookMeat`, `searchForMaterial`, `fillBottle`, `gutSnake`, `gutLizard`.
+ 	- Registered through bridge callback support when available.
+ 	- Params: `(action: string)`
+ 	- Returns: `nonce: string | nil`
+ 	- Allowed actions: `cookMeat`, `searchForMaterial`, `fillBottle`, `gutSnake`, `gutLizard`.
 
 ### Network events (server)
 
 - `metaden-outdoors:server:requestNonceEvent`
-	- Event-based fallback for nonce retrieval when callback helpers are unavailable.
-	- Params: `(action: string, requestId: string)`
-	- Response transport is internal and not part of the public contract.
+ 	- Event-based fallback for nonce retrieval when callback helpers are unavailable.
+ 	- Params: `(action: string, requestId: string)`
+ 	- Response transport is internal and not part of the public contract.
 
 - `metaden-outdoors:server:requestCookingSkillData`
-	- Params: `(requestId: string)`
-	- Responds via an internal client response event and returns current cooking skill data used by the cooking menu when `Config.UseMetaDenSkills = true`.
-	- Returns `nil` when skills integration is disabled or unavailable.
+ 	- Params: `(requestId: string)`
+ 	- Responds via an internal client response event and returns current cooking skill data used by the cooking menu when `Config.UseMetaDenSkills = true`.
+ 	- Returns `nil` when skills integration is disabled or unavailable.
 
 - `metaden-outdoors:server:cookMeat`
-	- Params: `(name: string, nonce: string)`
-	- Validates nonce + cooldown + required recipe items.
-	- Removes required ingredients and gives cooked item.
+ 	- Params: `(name: string, nonce: string)`
+ 	- Validates nonce + cooldown + required recipe items.
+ 	- Removes required ingredients and gives cooked item.
 
 - `metaden-outdoors:server:searchForMaterial`
-	- Params: `(lootableId: string, nonce: string)`
-	- `lootableId` must be a canonical `Config.Lootables[*].id`.
-	- Validates nonce + cooldown.
-	- Uses the matching `Config.Lootables` entry for required-item checks, weighted rewards, and optional bonus pools.
+ 	- Params: `(lootableId: string, nonce: string)`
+ 	- `lootableId` must be a canonical `Config.Lootables[*].id`.
+ 	- Validates nonce + cooldown.
+ 	- Uses the matching `Config.Lootables` entry for required-item checks, weighted rewards, and optional bonus pools.
 
 - `metaden-outdoors:server:GutSnake`
-	- Params: `(slot: number, nonce: string)`
-	- Validates nonce + cooldown.
-	- Requires a knife item in inventory.
-	- Removes source item from slot and gives `snakemeat` + `snakeskin`.
+ 	- Params: `(slot: number, nonce: string)`
+ 	- Validates nonce + cooldown.
+ 	- Requires a knife item in inventory.
+ 	- Removes source item from slot and gives `snakemeat` + `snakeskin`.
 
 - `metaden-outdoors:server:GutLizard`
-	- Params: `(slot: number, nonce: string)`
-	- Validates nonce + cooldown.
-	- Requires a knife item in inventory.
-	- Removes source item from slot and gives `lizardmeat` + `lizardskin`.
+ 	- Params: `(slot: number, nonce: string)`
+ 	- Validates nonce + cooldown.
+ 	- Requires a knife item in inventory.
+ 	- Removes source item from slot and gives `lizardmeat` + `lizardskin`.
 
 - `metaden-outdoors:server:fillBottle`
-	- Params: `(slot: number, nonce: string)`
-	- Validates nonce + cooldown.
-	- Removes empty bottle from slot and gives `dirtywater`.
+ 	- Params: `(slot: number, nonce: string)`
+ 	- Validates nonce + cooldown.
+ 	- Removes empty bottle from slot and gives `dirtywater`.
 
 ### Network events (client)
 
 - `metaden-outdoors:client:FillBottle`
-	- Params: `(slot: number)`
-	- Performs nearby-water and river-like checks client-side.
-	- Requests nonce and triggers server bottle fill event on success.
+ 	- Params: `(slot: number)`
+ 	- Performs nearby-water and river-like checks client-side.
+ 	- Requests nonce and triggers server bottle fill event on success.
 
 - `metaden-outdoors:client:GutSnake`
-	- Params: `(slot: number)`
-	- Handles local gut flow and requests nonce before triggering server gut event.
+ 	- Params: `(slot: number)`
+ 	- Handles local gut flow and requests nonce before triggering server gut event.
 
 - `metaden-outdoors:client:GutLizard`
-	- Params: `(slot: number)`
-	- Handles local gut flow and requests nonce before triggering server gut event.
+ 	- Params: `(slot: number)`
+ 	- Handles local gut flow and requests nonce before triggering server gut event.
 
 ### Commands
 
 - `/<Config.PlayerAnimationCommand> [setName]`
-	- No args: lists available animation sets.
-	- With `setName`: selects that search animation set for the player.
-	- Falls back to `Config.DefaultSearchAnimationSet` when no player override is set.
+ 	- No args: lists available animation sets.
+ 	- With `setName`: selects that search animation set for the player.
+ 	- Falls back to `Config.DefaultSearchAnimationSet` when no player override is set.
 
 ### Integration examples
 

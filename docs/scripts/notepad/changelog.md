@@ -23,7 +23,6 @@ All notable changes to this project will be documented in this file.
 
 ## [0.0.1] - 2026-02-17
 
-
 ### Added
 
 - Resource scaffold with client, server, shared, and web layers
@@ -32,4 +31,3 @@ All notable changes to this project will be documented in this file.
 - NUI callbacks for save, list, read, and delete note actions
 - MySQL persistence for notes through `laptop_files`
 - Per-laptop note ownership via laptop item metadata id
-

@@ -35,7 +35,6 @@ ensure notepad
 - Server (`server/server.lua`) resolves laptop id via shared inventory validation (prefers client-provided current `fd_laptop` id, with fallback to first owned laptop).
 - Notes are stored in `laptop_files` with `file_type = 'txt'` and upserted by unique key.
 
-
 ## Notes about resource name
 
 The NUI callbacks in [web/script.js](web/script.js) use `https://notepad/...`.

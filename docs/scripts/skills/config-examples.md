@@ -80,7 +80,8 @@ Config.DatabaseSync = {
 
 -- Admin XP command settings.
 -- Name: chat/console command used for XP administration.
--- Ace: required ACE permission to execute the command in-game.
+-- Ace: additional ACE permission checked at runtime for in-game command usage.
+-- Note: command registration is still restricted-mode, so command.<Name> ACE is also required.
 Config.AdminCommand = {
     Name = 'skillexp',
     Ace = 'metaden-skills.admin'
@@ -164,7 +165,8 @@ Config.MilestonesUi = {
 
 -- Mission/reputation runtime tuning.
 Config.MissionSystem = {
-    -- Admin command to assign missions manually.
+    -- Admin command name used to assign missions manually.
+    -- Registered in restricted mode; grant command.<AdminAssignCommandName> in ACE.
     AdminAssignCommandName = 'missionassign',
 
     -- Chance-based bonus reward settings.
@@ -195,6 +197,10 @@ Config.MissionSystem = {
             chance = 5,
             rep = 99999,
         },
+        education_engineering = {
+            chance = 5,
+            rep = 99999,
+        },
         traderweapons = {
             chance = 5,
             rep = 99999,
@@ -211,6 +217,7 @@ Config.MissionSystem = {
         drugseller = 0,
         dealerrep = 0,
         scrapping = 0,
+        education_engineering = 0,
         traderweapons = 0,
         butcher = 0,
         hacking = 0,
@@ -225,4 +232,5 @@ Config.MissionSystem = {
         'butcher',
     },
 }
+
 ```

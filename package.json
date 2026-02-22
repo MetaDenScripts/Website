@@ -9,7 +9,9 @@
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
     "check:content": "node scripts/check-content.mjs",
+    "lint": "npm run lint:markdown",
     "lint:markdown": "markdownlint-cli2 \"docs/**/*.md\"",
+    "lint:markdown:auto": "markdownlint-cli2 --fix \"docs/**/*.md\"",
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
     "test": "npm run test:unit && npm run test:e2e"

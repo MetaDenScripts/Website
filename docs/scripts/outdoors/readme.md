@@ -20,7 +20,6 @@ Optional integrations:
 
 - `metaden-skills` (only used when `Config.UseMetaDenSkills = true`)
 
-
 ## Installation
 
 1. Place this folder in your resources.
@@ -63,20 +62,20 @@ Each entry in `Config.Lootables` supports:
 - `enabled` (bool): toggles this lootable.
 - `props` (array): target model list.
 - `interaction` (table):
-	- `id`, `icon`, `label`, `distance`, `progressLabel`, `searchTime`.
+ 	- `id`, `icon`, `label`, `distance`, `progressLabel`, `searchTime`.
 - `successChance` (0-100): server-side success chance.
 - `cooldownMs` (number): local retry cooldown for this lootable.
 - `rollMode` (`single`|`multi`) and `rolls` (number): chance pick behavior.
 - `lootTable` (array): chance entries:
-	- `{ item, chance, min, max, applySkillBonus? }`
-	- `weight` is still accepted as a legacy alias, but `chance` is preferred.
+ 	- `{ item, chance, min, max, applySkillBonus? }`
+ 	- `weight` is still accepted as a legacy alias, but `chance` is preferred.
 - `requiredItem` (optional):
-	- `{ enabled, item, amount, mode }`
-	- `mode`: `check` | `consume_on_success` | `consume_on_attempt`
+ 	- `{ enabled, item, amount, mode }`
+ 	- `mode`: `check` | `consume_on_success` | `consume_on_attempt`
 - `minigame` (optional):
-	- `{ enabled, resource, export, args, passOnNil }`
+ 	- `{ enabled, resource, export, args, passOnNil }`
 - `animation` (optional):
-	- `{ defaultSet, allowPlayerOverride }`
+ 	- `{ defaultSet, allowPlayerOverride }`
 - `bonusPools` (optional array): each has `chance`, `rollMode`, `rolls`, `lootTable`.
 
 ### Player animation command
