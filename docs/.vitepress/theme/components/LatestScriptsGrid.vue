@@ -31,7 +31,7 @@ const cards = getLatestScripts(scriptsIndex.scripts as ScriptIndexItem[], 16);
               rel="noreferrer noopener"
               :aria-label="`Open ${card.name} store page in a new tab`"
             >
-              Store
+              Buy
             </a>
             <a :href="card.docsUrl" :aria-label="`Open ${card.name} documentation`">
               Documentation

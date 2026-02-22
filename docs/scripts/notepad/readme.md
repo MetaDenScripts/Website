@@ -1,17 +1,8 @@
 # Notepad
 
-Lightweight notes app for `fd_laptop`, backed by MySQL and integrated with Qbox player/inventory data.
+Lightweight Quill-based notes app for `fd_laptop`, persisted in MySQL per laptop metadata id.
 
-## Features
-
-- Create new notes
-- Save and update notes by file name
-- Open existing notes from a list
-- Delete notes
-- Notes are tied to the current laptop item metadata id
-- Rich text editor (Quill) with JSON content storage
-
-## Requirements
+## Dependencies
 
 - `ox_lib`
 - `oxmysql`
@@ -21,12 +12,12 @@ Lightweight notes app for `fd_laptop`, backed by MySQL and integrated with Qbox 
 
 ## Installation
 
-1. Place this resource in your server resources folder.
-2. Import [database.sql](database.sql) into your server database.
-3. Ensure dependencies are started before this resource.
+1. Place this resource in your server resources folder as `notepad`.
+2. Import [database.sql](database.sql) into your DB.
+3. Start dependencies before this resource.
 4. Add `ensure notepad` to your server config.
 
-Example start order:
+Suggested order:
 
 ```cfg
 ensure oxmysql
@@ -36,6 +27,14 @@ ensure qbx_core
 ensure fd_laptop
 ensure notepad
 ```
+
+## Runtime Behavior
+
+- Web UI (`web/script.js`) sends NUI fetch calls to client callbacks.
+- Client (`client/client.lua`) forwards save/delete to server events and reads data via `lib.callback.await`.
+- Server (`server/server.lua`) resolves laptop id via shared inventory validation (prefers client-provided current `fd_laptop` id, with fallback to first owned laptop).
+- Notes are stored in `laptop_files` with `file_type = 'txt'` and upserted by unique key.
+
 
 ## Notes about resource name
 
@@ -49,6 +48,7 @@ This resource uses the `laptop_files` table with a unique key on:
 - `laptop_id`
 - `file_name`
 - `file_type`
+- `contents`
 
 That allows save operations to upsert existing files for the same laptop and file type.
 

@@ -8,14 +8,14 @@ hero:
   actions:
     - theme: brand
       text: View Scripts
-      link: https://metadenscripts.tebex.io/
+      link: https://store.metadenscripts.com/
     - theme: alt
       text: Documentation
       link: /scripts/
 
 features:
   - title: Framework-Ready Architecture
-    details: Seamless support for ESX, QBCore, standalone setups, and cross-framework environments.
+    details: Seamless support for ESX, QBCore, QBox standalone setups, and cross-framework environments.
   - title: Built for Real Roleplay
     details: Systems designed around actual server workflows — jobs, inventories, permissions, and player progression.
   - title: Optimized for Scale

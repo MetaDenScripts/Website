@@ -4,7 +4,7 @@
       "id": "outdoors",
       "name": "Outdoors",
       "summary": "Survival, outdoor activities and interactions.",
-      "storeUrl": "https://store.metadenscripts.com/outdoors",
+      "storeUrl": "https://store.metadenscripts.com/package/outdoors",
       "addedAt": "2026-01-15",
       "order": 1,
       "status": "active",
@@ -20,7 +20,7 @@
       "id": "skills",
       "name": "MetaDen Skills",
       "summary": "Player skills, milestones UI, and reputation/levels.",
-      "storeUrl": "https://store.metadenscripts.com/skills",
+      "storeUrl": "https://store.metadenscripts.com/package/skills",
       "addedAt": "2026-02-10",
       "order": 2,
       "status": "active",
@@ -36,7 +36,7 @@
       "id": "notepad",
       "name": "Notepad",
       "summary": "FD Laptop notes application with MySQL persistence.",
-      "storeUrl": "https://store.metadenscripts.com/notepad",
+      "storeUrl": "https://store.metadenscripts.com/package/notepad",
       "addedAt": "2026-02-17",
       "order": 3,
       "status": "active",
@@ -46,6 +46,22 @@
         "readme": "scripts/notepad/readme.md",
         "config-examples": "scripts/notepad/config-examples.md",
         "changelog": "scripts/notepad/changelog.md"
+      }
+    },
+    {
+      "id": "metadenbridge",
+      "name": "MetaBridge",
+      "summary": "Bridge framework for MetaDen scripts.",
+      "storeUrl": "https://store.metadenscripts.com/package/metabridge",
+      "addedAt": "2026-02-17",
+      "order": 3,
+      "status": "active",
+      "imageUrl": "/scripts-images/metabridge.png",
+      "sections": {
+        "api": "scripts/metabridge/api.md",
+        "readme": "scripts/metabridge/readme.md",
+        "config-examples": "scripts/metabridge/config-examples.md",
+        "changelog": "scripts/metabridge/changelog.md"
       }
     }
   ]

@@ -205,6 +205,220 @@ Config.MinToGet = 1
 Config.MaxToGet = 5
 
 -- ============================================================
+-- Search animation presets
+-- ============================================================
+-- Players can pick one of these sets with /outdoorsanim <setName>
+-- Default remains the current behavior (mechanic)
+Config.SearchAnimationSets = {
+    mechanic = {
+        label = 'Mechanic Search',
+        kind = 'mechanic'
+    },
+    kneel = {
+        label = 'Kneel Search',
+        kind = 'kneel'
+    }
+}
+
+Config.DefaultSearchAnimationSet = 'mechanic'
+Config.PlayerAnimationCommand = 'outdoorsanim'
+
+-- ============================================================
+-- Data-driven lootables
+-- ============================================================
+-- Each entry supports:
+-- id: unique key
+-- props: list of models to target
+-- interaction: ui details (label/icon/distance/progressLabel/searchTime)
+-- successChance: % chance for a successful search (server-authoritative)
+-- cooldownMs: local client cooldown before retrying
+-- rollMode: 'single' or 'multi'
+-- rolls: number of weighted picks for multi mode
+-- lootTable: { item, chance, min, max, applySkillBonus? }
+-- requiredItem: optional gate
+--   { enabled=true, item='lockpick', amount=1, mode='check|consume_on_success|consume_on_attempt' }
+-- minigame: optional client export hook
+--   { enabled=true, resource='my_resource', export='StartMinigame', args={...}, passOnNil=true }
+-- animation: optional per-lootable animation defaults
+--   { defaultSet='mechanic', allowPlayerOverride=true }
+-- bonusPools: optional additional weighted pools rolled after success
+--   { chance=25, rollMode='single', rolls=1, lootTable={...} }
+
+local function BuildDefaultLootables()
+    return {
+        {
+            id = 'rocks',
+            enabled = true,
+            legacyEnabledKey = 'Rocks',
+            legacyAliases = { 'rocks' },
+            props = Config.Rocks,
+            interaction = {
+                id = 'collect-rocks',
+                icon = 'fa-solid fa-magnifying-glass',
+                label = 'Collect Rocks',
+                distance = 5.0,
+                progressLabel = 'Searching for rocks...',
+                searchTime = Config.SearchTime
+            },
+            successChance = Config.RockRewardChance,
+            cooldownMs = Config.Timeout,
+            rollMode = 'single',
+            rolls = 1,
+            lootTable = {
+                { item = 'rock', chance = 40, min = Config.MinToGet, max = Config.MaxToGet },
+                { item = 'smallrocks', chance = 30, min = Config.MinToGet, max = Config.MaxToGet },
+                { item = 'carbon', chance = 20, min = Config.MinToGet, max = Config.MaxToGet },
+                { item = 'fishbait', chance = 10, min = Config.MinToGet, max = Config.MaxToGet }
+            },
+            requiredItem = {
+                enabled = false,
+                item = nil,
+                amount = 1,
+                mode = 'check'
+            },
+            minigame = {
+                enabled = false,
+                resource = nil,
+                export = nil,
+                args = {},
+                passOnNil = true
+            },
+            animation = {
+                defaultSet = 'mechanic',
+                allowPlayerOverride = true
+            },
+            bonusPools = {
+                {
+                    chance = Config.MushroomChance,
+                    rollMode = 'single',
+                    rolls = 1,
+                    lootTable = {
+                        { item = 'mushrooms', chance = 100, min = Config.MinToGet, max = Config.MaxToGet }
+                    }
+                },
+                {
+                    chance = Config.AnimalChance,
+                    rollMode = 'single',
+                    rolls = 1,
+                    lootTable = {
+                        { item = 'viper', chance = 6, min = 1, max = 1 },
+                        { item = 'charidotellasexpunctata', chance = 6, min = 1, max = 1 },
+                        { item = 'stagbeetle', chance = 6, min = 1, max = 1 },
+                        { item = 'longhornbeetle', chance = 6, min = 1, max = 1 },
+                        { item = 'hornbeetle', chance = 6, min = 1, max = 1 },
+                        { item = 'gecko3', chance = 6, min = 1, max = 1 },
+                        { item = 'gecko2', chance = 6, min = 1, max = 1 },
+                        { item = 'gecko', chance = 6, min = 1, max = 1 },
+                        { item = 'dungbeetle', chance = 6, min = 1, max = 1 },
+                        { item = 'coralsnake', chance = 6, min = 1, max = 1 },
+                        { item = 'colorbeetle', chance = 6, min = 1, max = 1 },
+                        { item = 'cobra', chance = 6, min = 1, max = 1 },
+                        { item = 'blackbeetle', chance = 6, min = 1, max = 1 },
+                        { item = 'beardeddragon', chance = 6, min = 1, max = 1 },
+                        { item = 'anaconda', chance = 6, min = 1, max = 1 },
+                        { item = 'spider', chance = 5, min = 1, max = 1 },
+                        { item = 'tarantula', chance = 5, min = 1, max = 1 }
+                    }
+                }
+            }
+        },
+        {
+            id = 'wood_logs',
+            enabled = true,
+            legacyEnabledKey = 'Wood',
+            legacyAliases = { 'wood' },
+            props = Config.Wood,
+            interaction = {
+                id = 'collect-wood-logs',
+                icon = 'fa-solid fa-tree',
+                label = 'Collect Wood',
+                distance = 5.0,
+                progressLabel = 'Searching for wood...',
+                searchTime = Config.SearchTime
+            },
+            successChance = Config.WoodRewardChance,
+            cooldownMs = Config.Timeout,
+            rollMode = 'single',
+            rolls = 1,
+            lootTable = {
+                { item = 'wood', chance = 60, min = Config.MinToGet, max = Config.MaxToGet },
+                { item = 'fishbait', chance = 20, min = Config.MinToGet, max = Config.MaxToGet },
+                { item = 'carbon', chance = 20, min = Config.MinToGet, max = Config.MaxToGet }
+            },
+            requiredItem = {
+                enabled = false,
+                item = nil,
+                amount = 1,
+                mode = 'check'
+            },
+            minigame = {
+                enabled = false,
+                resource = nil,
+                export = nil,
+                args = {},
+                passOnNil = true
+            },
+            animation = {
+                defaultSet = 'mechanic',
+                allowPlayerOverride = true
+            }
+        },
+        {
+            id = 'wood_items',
+            enabled = true,
+            legacyEnabledKey = 'WoodItem',
+            legacyAliases = {},
+            props = Config.WoodItem,
+            interaction = {
+                id = 'collect-wood-items',
+                icon = 'fa-solid fa-tree',
+                label = 'Collect Wood',
+                distance = 5.0,
+                progressLabel = 'Searching for wood...',
+                searchTime = Config.SearchTime
+            },
+            successChance = Config.WoodRewardChance,
+            cooldownMs = Config.Timeout,
+            rollMode = 'single',
+            rolls = 1,
+            lootTable = {
+                { item = 'wood', chance = 60, min = Config.MinToGet, max = Config.MaxToGet },
+                { item = 'fishbait', chance = 20, min = Config.MinToGet, max = Config.MaxToGet },
+                { item = 'carbon', chance = 20, min = Config.MinToGet, max = Config.MaxToGet }
+            },
+            requiredItem = {
+                enabled = false,
+                item = nil,
+                amount = 1,
+                mode = 'check'
+            },
+            minigame = {
+                enabled = false,
+                resource = nil,
+                export = nil,
+                args = {},
+                passOnNil = true
+            },
+            animation = {
+                defaultSet = 'mechanic',
+                allowPlayerOverride = true
+            }
+        }
+    }
+end
+
+Config.Lootables = Config.Lootables or BuildDefaultLootables()
+
+if Config.EnabledTargets and type(Config.Lootables) == 'table' then
+    for _, lootable in ipairs(Config.Lootables) do
+        local key = lootable.legacyEnabledKey
+        if key and Config.EnabledTargets[key] == false then
+            lootable.enabled = false
+        end
+    end
+end
+
+-- ============================================================
 -- Cooking recipes
 -- ============================================================
 -- Each recipe:
@@ -251,4 +465,5 @@ Config.Recipes = {
         }
     },
 }
+
 ```
