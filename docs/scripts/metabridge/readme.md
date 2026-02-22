@@ -1,60 +1,67 @@
-# Notepad
+# Metabridge
 
-Lightweight notes app for `fd_laptop`, backed by MySQL and integrated with Qbox player/inventory data.
+Framework, inventory, callback, target/UI, and dispatch bridge for FiveM resources.
 
-## Features
+`metabridge` gives you one stable API (`MetaBridge` server, `MetaBridgeClient` client) and routes calls to the active framework/inventory/dispatch adapters.
 
-- Create new notes
-- Save and update notes by file name
-- Open existing notes from a list
-- Delete notes
-- Notes are tied to the current laptop item metadata id
-- Rich text editor (Quill) with JSON content storage
+## Architecture
+
+- Core server runtime: `resource/bridge.lua`
+- Core client runtime: `resource/client.lua`
+- Dispatch client extension: `links/dispatch/client.lua`
+- Export surfaces: `exports/server.lua`, `exports/client.lua`
+- Global loader: `init.lua`
 
 ## Requirements
 
-- `ox_lib`
-- `oxmysql`
-- `qbx_core`
-- `ox_inventory`
-- `fd_laptop`
+- `ox_lib` (dependency in `fxmanifest.lua`)
+- One supported framework adapter (auto-detected or configured via `BridgeConfig.framework`)
+- Optional inventory/dispatch systems (auto-detected or configured)
 
-## Installation
+## Setup
 
-1. Place this resource in your server resources folder.
-2. Import [database.sql](database.sql) into your server database.
-3. Ensure dependencies are started before this resource.
-4. Add `ensure notepad` to your server config.
+### Style 1: Use exports (recommended)
 
-Example start order:
+Add dependency order in your resource manifest, then call bridge exports directly.
 
-```cfg
-ensure oxmysql
-ensure ox_lib
-ensure ox_inventory
-ensure qbx_core
-ensure fd_laptop
-ensure notepad
+```lua
+dependency 'metabridge'
 ```
 
-## Notes about resource name
+Server example:
 
-The NUI callbacks in [web/script.js](web/script.js) use `https://notepad/...`.
-Keep the resource folder name as `notepad`, or update callback URLs if you rename it.
+```lua
+local Bridge = exports['metabridge']
+local framework = Bridge:getFramework()
+```
 
-## Database
+Client example:
 
-This resource uses the `laptop_files` table with a unique key on:
+```lua
+local Bridge = exports['metabridge']
+Bridge:notify({ type = 'success', description = 'Bridge ready' })
+```
 
-- `laptop_id`
-- `file_name`
-- `file_type`
+### Style 2: Import globals with `@metabridge/init.lua`
 
-That allows save operations to upsert existing files for the same laptop and file type.
+In your manifest:
 
-## How it works
+```lua
+shared_scripts {
+  '@metabridge/init.lua'
+}
+```
 
-- Server reads the player laptop item from `ox_inventory`.
-- Laptop metadata id is used as the per-device file owner.
-- Save requests upsert JSON note contents into MySQL.
-- List/read/delete actions are scoped to the same laptop id.
+This exposes globals:
+
+- Server: `MetaBridge`
+- Client: `MetaBridgeClient`
+
+Important: `init.lua` force-sets `BridgeConfig.debug = true`.
+
+## Typing Notes
+
+- Signatures use lightweight Lua-friendly hints: `name:type` and `-> returnType`.
+- Common scalar aliases used in this README: `source:number`, `itemName:string`, `plate:string`.
+- Adapter-specific payloads/results are intentionally typed as `table`, `table|nil`, or `any`.
+- `nil` in a return type indicates the method can fail or the adapter may not provide data.
