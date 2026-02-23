@@ -46,10 +46,51 @@ const scriptSidebar = [...scriptsData.scripts]
     ];
   });
 
+const siteUrl = "https://metadenscripts.com";
+const socialDescription =
+  "Premium FiveM scripts with clean APIs, polished UI, and scalable architecture for serious roleplay servers.";
+const socialImage = `${siteUrl}/mdscripts.png`;
+
+const buildPageUrl = (relativePath?: string) => {
+  if (!relativePath) {
+    return siteUrl;
+  }
+
+  const withoutExtension = relativePath.replace(/\.md$/, "");
+  const normalized = withoutExtension.replace(/\/index$/, "/");
+  const withLeadingSlash = normalized.startsWith("/") ? normalized : `/${normalized}`;
+
+  return `${siteUrl}${withLeadingSlash}`;
+};
+
 export default defineConfig({
   // base: "/Website/",
   title: "MetaDen Scripts",
-  description: "Engineered for immersive roleplay. Built to scale.",
+  description: socialDescription,
+  head: [
+    ["meta", { property: "og:type", content: "website" }],
+    ["meta", { property: "og:image", content: socialImage }],
+    ["meta", { property: "og:image:alt", content: "MetaDen Scripts logo" }],
+    ["meta", { name: "twitter:card", content: "summary_large_image" }],
+    ["meta", { name: "twitter:image", content: socialImage }],
+    ["meta", { name: "twitter:image:alt", content: "MetaDen Scripts logo" }]
+  ],
+  transformHead: ({ pageData }) => {
+    const pageTitle = pageData.title
+      ? `${pageData.title} | MetaDen Scripts`
+      : "MetaDen Scripts";
+    const frontmatter = pageData.frontmatter as { description?: string } | undefined;
+    const pageDescription = pageData.description || frontmatter?.description || socialDescription;
+    const pageUrl = buildPageUrl(pageData.relativePath);
+
+    return [
+      ["meta", { property: "og:title", content: pageTitle }],
+      ["meta", { property: "og:description", content: pageDescription }],
+      ["meta", { property: "og:url", content: pageUrl }],
+      ["meta", { name: "twitter:title", content: pageTitle }],
+      ["meta", { name: "twitter:description", content: pageDescription }]
+    ];
+  },
   cleanUrls: true,
   ignoreDeadLinks: true,
   themeConfig: {
