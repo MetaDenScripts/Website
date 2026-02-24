@@ -3,7 +3,7 @@ import scriptsIndex from "../../../scripts/_meta/scripts-index.json";
 import { getLatestScripts } from "../../../../src/lib/latest-scripts";
 import type { ScriptIndexItem } from "../../../../src/lib/content-model";
 
-const cards = getLatestScripts(scriptsIndex.scripts as ScriptIndexItem[], 16);
+const cards = getLatestScripts(scriptsIndex.scripts as ScriptIndexItem[], 4);
 </script>
 
 <template>

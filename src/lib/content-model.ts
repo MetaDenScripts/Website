@@ -15,6 +15,7 @@ export interface ScriptIndexItem {
   addedAt: string;
   order: number;
   status: "active" | "deprecated";
+  imageUrl?: string;
   sections: Record<SectionType, string>;
 }
 

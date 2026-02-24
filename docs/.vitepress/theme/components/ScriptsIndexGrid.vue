@@ -29,6 +29,12 @@ function toRoute(path: string): string {
   <ul v-else class="script-card-grid" role="list">
     <li v-for="script in scripts" :key="script.id" class="script-card">
       <article :aria-labelledby="`script-${script.id}`">
+        <img
+          v-if="script.imageUrl"
+          :src="script.imageUrl"
+          :alt="`${script.name} preview image`"
+          class="script-card-image"
+        />
         <h2 :id="`script-${script.id}`">
           <a :href="toRoute(script.sections.readme)">{{ script.name }}</a>
         </h2>
