@@ -383,6 +383,65 @@ a:hover {
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--vp-c-brand-1) 30%, transparent);
 }
 
+.currently-working-section {
+  margin-top: 3rem;
+}
+
+.currently-working-card {
+  display: grid;
+  gap: 1.5rem;
+  align-items: center;
+  background: var(--vp-c-bg-soft);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  position: relative;
+}
+
+.currently-working-image {
+  border-radius: 1rem;
+  overflow: hidden;
+  background: var(--vp-c-bg-mute);
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.currently-working-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.currently-working-image.placeholder {
+  border: 1px dashed var(--vp-c-divider);
+  color: var(--vp-c-text-2);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+}
+
+.currently-working-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.currently-working-title {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.currently-working-description {
+  margin: 0;
+  color: var(--vp-c-text-2);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
 .script-card a,
 .script-card a:hover,
 .script-card a:focus,
@@ -397,6 +456,10 @@ a:hover {
 @media (min-width: 768px) {
   .script-card-grid.latest-scripts-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .currently-working-card {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
   }
 }
 

@@ -1,19 +1,19 @@
 {
   "scripts": [
     {
-      "id": "outdoors",
-      "name": "Outdoors",
-      "summary": "Survival, outdoor activities and interactions.",
-      "storeUrl": "https://store.metadenscripts.com/package/outdoors",
+      "id": "tailor",
+      "name": "Tailor",
+      "summary": "Tailor system with usable clothes, deliveries and leveling.",
+      "storeUrl": "https://store.metadenscripts.com/package/tailor",
       "addedAt": "2026-01-15",
       "order": 1,
       "status": "active",
-      "imageUrl": "/scripts-images/outdoors.png",
+      "imageUrl": "/scripts-images/tailor.png",
       "sections": {
-        "api": "scripts/outdoors/api.md",
-        "readme": "scripts/outdoors/readme.md",
-        "config-examples": "scripts/outdoors/config-examples.md",
-        "changelog": "scripts/outdoors/changelog.md"
+        "api": "scripts/tailor/api.md",
+        "readme": "scripts/tailor/readme.md",
+        "config-examples": "scripts/tailor/config-examples.md",
+        "changelog": "scripts/tailor/changelog.md"
       }
     },
     {
@@ -33,12 +33,28 @@
       }
     },
     {
+      "id": "outdoors",
+      "name": "Outdoors",
+      "summary": "Survival, outdoor activities and interactions.",
+      "storeUrl": "https://store.metadenscripts.com/package/outdoors",
+      "addedAt": "2026-01-15",
+      "order": 1,
+      "status": "active",
+      "imageUrl": "/scripts-images/outdoors.png",
+      "sections": {
+        "api": "scripts/outdoors/api.md",
+        "readme": "scripts/outdoors/readme.md",
+        "config-examples": "scripts/outdoors/config-examples.md",
+        "changelog": "scripts/outdoors/changelog.md"
+      }
+    },
+    {
       "id": "notepad",
       "name": "Notepad",
       "summary": "FD Laptop notes application with MySQL persistence.",
       "storeUrl": "https://store.metadenscripts.com/package/notepad",
       "addedAt": "2026-02-17",
-      "order": 3,
+      "order": 4,
       "status": "active",
       "imageUrl": "/scripts-images/notepad.png",
       "sections": {
@@ -54,7 +70,7 @@
       "summary": "Bridge framework for MetaDen scripts.",
       "storeUrl": "https://store.metadenscripts.com/package/metabridge",
       "addedAt": "2026-02-17",
-      "order": 3,
+      "order": 4,
       "status": "active",
       "imageUrl": "/scripts-images/metabridge.png",
       "sections": {

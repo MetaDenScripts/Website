@@ -24,4 +24,5 @@ features:
 
 <!-- markdownlint-disable MD033 -->
 <LatestScriptsGrid />
+<CurrentlyWorkingCard />
 <!-- markdownlint-enable MD033 -->
