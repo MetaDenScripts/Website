@@ -1,12 +1,28 @@
 {
   "scripts": [
+      {
+      "id": "restorations",
+      "name": "Restorations",
+      "summary": "Search for materials, refurbish the wrecks and components and get a brand new vehicle to drive around!",
+      "storeUrl": "https://store.metadenscripts.com/package/restorations",
+      "addedAt": "2026-03-02",
+      "order": 1,
+      "status": "active",
+      "imageUrl": "/scripts-images/restoration.png",
+      "sections": {
+        "api": "scripts/restorations/api.md",
+        "readme": "scripts/restorations/readme.md",
+        "config-examples": "scripts/restorations/config-examples.md",
+        "changelog": "scripts/restorations/changelog.md"
+      }
+    },
     {
       "id": "tailor",
       "name": "Tailor",
       "summary": "Tailor system with usable clothes, deliveries and leveling.",
       "storeUrl": "https://store.metadenscripts.com/package/tailor",
       "addedAt": "2026-01-15",
-      "order": 1,
+      "order": 2,
       "status": "active",
       "imageUrl": "/scripts-images/tailor.png",
       "sections": {
@@ -22,7 +38,7 @@
       "summary": "Player skills, milestones UI, and reputation/levels.",
       "storeUrl": "https://store.metadenscripts.com/package/skills",
       "addedAt": "2026-02-10",
-      "order": 2,
+      "order": 3,
       "status": "active",
       "imageUrl": "/scripts-images/skills.png",
       "sections": {
@@ -38,7 +54,7 @@
       "summary": "Survival, outdoor activities and interactions.",
       "storeUrl": "https://store.metadenscripts.com/package/outdoors",
       "addedAt": "2026-01-15",
-      "order": 1,
+      "order": 4,
       "status": "active",
       "imageUrl": "/scripts-images/outdoors.png",
       "sections": {
@@ -54,7 +70,7 @@
       "summary": "Free FD Laptop notes application with MySQL persistence.",
       "storeUrl": "https://store.metadenscripts.com/package/notepad",
       "addedAt": "2026-02-17",
-      "order": 4,
+      "order": 5,
       "status": "active",
       "imageUrl": "/scripts-images/notepad.png",
       "sections": {
@@ -70,7 +86,7 @@
       "summary": "Bridge framework for MetaDen scripts.",
       "storeUrl": "https://store.metadenscripts.com/package/metabridge",
       "addedAt": "2026-02-17",
-      "order": 4,
+      "order": 6,
       "status": "active",
       "imageUrl": "/scripts-images/metabridge.png",
       "sections": {

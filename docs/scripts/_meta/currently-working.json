@@ -1,8 +1,8 @@
 {
   "teaser": {
-    "title": "Wreck Restoration",
-    "description": "Pick up scrapyard wrecks and restore them to their former glory! Search for materials, refurbish the wrecks and components and get a brand new vehicle to drive around!",
-    "imageUrl": "/scripts-images/restoration.png",
-    "imageAlt": "metaden-restorations"
+    "title": "Fight Club",
+    "description": "Join underground fights across the city, earn cash and rise through the ranks to become the ultimate champion and train your own fighters and manage your own fight club.",
+    "imageUrl": "/scripts-images/fight_club.png",
+    "imageAlt": "metaden-fight-club"
   }
 }
