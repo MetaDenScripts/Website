@@ -93,9 +93,21 @@
 - `addTargetBoxZone(data:table) -> any`
 - `addTargetSphereZone(data:table) -> any`
 - `removeTargetZone(zoneId:string|number) -> boolean`
+- `removeTargetModel(models:any) -> boolean`
+- `addTargetLocalEntity(entity:number, options:table) -> boolean`
+- `removeTargetLocalEntity(entity:number) -> boolean`
 - `showTextUI(text:string) -> boolean`
 - `hideTextUI() -> boolean`
 - `isTextUIOpen() -> boolean`
+
+### Dialogs / Zones / Points
+
+- `alertDialog(data:table) -> string|nil` — confirm/cancel dialog; returns `'confirm'` or `nil`.
+- `addZoneSphere(data:table) -> any|nil` — proximity sphere zone; returns the zone object.
+- `addPoint(data:table) -> any|nil` — proximity tracking point; returns the point object.
+- `requestModel(model:string|number, timeoutMs:number|nil) -> boolean`
+
+All four methods honour `BridgeConfig` overrides so server operators can swap ox_lib for another implementation without touching consumer resources.
 
 ### Advanced Dispatch API
 

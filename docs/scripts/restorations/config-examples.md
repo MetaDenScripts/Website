@@ -25,6 +25,34 @@ Config = {
         RawMaterials = 0.20,
         Parts = 0.80,
     },
+    -- Pre-completion: randomly pre-fill a percentage of the required material/part slots
+    -- when a new wreck is created, giving the player a head start.
+    --
+    --   Enabled       – set to false to disable pre-completion entirely.
+    --   MinPercent    – minimum percentage of required slots that will be pre-filled (0–100).
+    --   MaxPercent    – maximum percentage of required slots that will be pre-filled (0–100).
+    --
+    -- A random percentage is picked between Min and Max and applied to the slot count for
+    -- that wreck type.  Each chosen slot is filled with a random amount between 1 and its
+    -- required count (partial fill). The selection always guarantees at least one raw-material
+    -- slot AND at least one part slot when enough slots are being pre-filled and both
+    -- categories exist for the wreck type.
+    --
+    -- TraderWreck values should be higher than WorldWreck values so bought wrecks feel more
+    -- complete from the start.
+    PreCompletion = {
+        Enabled = true,
+        -- Wrecks discovered and started in the open world (beginRestoration).
+        WorldWreck = {
+            MinPercent = 0,
+            MaxPercent = 5,
+        },
+        -- Wrecks purchased from the trader (buyWreck).
+        TraderWreck = {
+            MinPercent = 10,
+            MaxPercent = 30,
+        },
+    },
     -- Global cap for active restorations per player.
     MaxWrecksPerPlayer = 1,
     -- Per-role override for MaxWrecksPerPlayer (role name keys are normalized to lowercase).
@@ -768,5 +796,4 @@ Config = {
         },
     },
 }
-
 ```

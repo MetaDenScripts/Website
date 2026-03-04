@@ -322,3 +322,18 @@ Per-player, per-type breakdown used for leaderboards and profile charts.
 | `totalWrecksRestored` | Wrecks completed for this type |
 | `totalResourcesAdded` | Resources contributed for this type |
 | `updatedAt` | Last stat update time |
+
+---
+
+## Inventory Integration
+
+All inventory operations are routed through `metabridge`:
+
+- Item count checks
+- Metadata display registration
+- Slot-aware metadata updates
+- Slot-targeted item removal (for condition-based parts)
+- Item definition and weight lookups
+- Create-item metadata hook registration (auto-sets `Condition = "100%"` on new parts)
+
+No direct `exports.ox_inventory:*` calls are used in gameplay code.

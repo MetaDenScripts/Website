@@ -3,6 +3,7 @@
 
 > Transform rusted-out scrap heaps into roaring machines. **metaden-restorations** is a deep, multi-stage vehicle restoration gameplay resource for FiveM servers — complete with scrap searching, part crafting, skill progression, a trader NPC, engine hoisting, tow-truck transport, an in-game admin panel, and a global leaderboard. Every wrench turn matters.
 
+---
 
 ## Features
 
@@ -10,12 +11,13 @@
 - **Scrap searching** — interact with world wreck props to find parts or raw materials with configurable drop chances and per-player cooldowns.
 - **Dependency-ordered restoration menu** — parts and materials unlock in logical order: engine before spark plugs, axles before suspension.
 - **Weighted progress system** — raw materials count for 20% and parts for 80% of total completion (fully configurable).
+- **Pre-completion head start** — configurable percentage of required slots are randomly pre-filled when a wreck is created. Trader-bought wrecks start with more progress than world wrecks; the selection always mixes at least one raw material and one part.
 - **Visual stage transitions** — the wreck prop swaps to a less-destroyed model as key milestones are hit (doors → glass → final covered vehicle).
 - **Engine hoist workflow** — pick up a wreck with an `engine_hoist` item, carry it, and place it anywhere — position is persisted in the database.
 - **Tow-truck transport** — use a flatbed or slam truck to haul wrecks between locations.
 - **Part-repair crafting benches** — restore broken parts to 100% condition at pre-configured world zones using raw materials.
 - **Trader NPC** — a world-placed ped lets players browse and purchase wrecks from the model pool for cash or bank.
-- **Mission assignment** — the trader can randomly assign `metaden-skills` restoration missions to players.
+- **Mission assignment** — the trader can randomly assign `metaden-skills` restoration missions to players. Missions the player already holds are skipped; if all configured missions are active the player is told so instead of receiving a duplicate.
 - **Rare model pool** — admins can queue one-time vehicle models per wreck type; the next restoration of that type consumes the queued model before falling back to the random pool.
 - **Multi-wreck ownership** — configurable per-player cap and per-role overrides so mechanics can hold more active wrecks than civilians.
 - **Skill integration** (`metaden-skills`) — scrapping and engineering skill levels boost scrap-search rewards; reputation categories earn XP on material adds.
@@ -33,6 +35,7 @@
 
 | Resource | Role |
 |---|---|
+| [`ox_lib`](https://github.com/overextended/ox_lib) | Required — callback system (`lib.callback`), progress bars, alert dialogs, zones |
 | [`metabridge`](https://github.com/metaden/metabridge) | Free bridge for framework, inventory, UI, target, and zone abstraction |
 | [`oxmysql`](https://github.com/overextended/oxmysql) | Async MySQL queries |
 | [`metaden-skills`](https://github.com/metaden/metaden-skills) | Optional — skill bonuses, missions, reputation |
@@ -63,19 +66,12 @@ npm run build
 
 ### 3. Load Order (`server.cfg`)
 
-```
-ensure oxmysql
-ensure metabridge
-ensure metaden-skills   # optional
-ensure metaden-restorations
-```
-
-If you are using `ox_lib` and/or `ox_target` (recommended), ensure them **before** `metabridge`:
+`ox_lib` is a direct dependency and must be ensured before `metabridge`. If you also use `ox_target`, ensure it between `ox_lib` and `metabridge`:
 
 ```
 ensure oxmysql
 ensure ox_lib
-ensure ox_target
+ensure ox_target        # if used
 ensure metabridge
 ensure metaden-skills   # optional
 ensure metaden-restorations
@@ -139,6 +135,33 @@ ProgressWeights = {
     Parts        = 0.80,  -- parts contribute 80% of completion
 }
 ```
+
+### Pre-Completion
+
+When a new wreck is created the server randomly pre-fills a subset of its required material/part slots, giving the player a head start. Each pre-filled slot receives a random amount between 1 and its required count (partial fill, not instant completion).
+
+```lua
+PreCompletion = {
+    Enabled = true,
+    -- Wrecks discovered and started in the open world (beginRestoration).
+    WorldWreck  = { MinPercent = 0,  MaxPercent = 20 },
+    -- Wrecks purchased from the trader (buyWreck).
+    TraderWreck = { MinPercent = 20, MaxPercent = 50 },
+}
+```
+
+| Field | Description |
+|---|---|
+| `Enabled` | Set to `false` to disable pre-completion entirely. |
+| `WorldWreck.MinPercent` | Minimum % of required slots pre-filled for world wrecks. |
+| `WorldWreck.MaxPercent` | Maximum % of required slots pre-filled for world wrecks. |
+| `TraderWreck.MinPercent` | Minimum % of required slots pre-filled for trader wrecks. |
+| `TraderWreck.MaxPercent` | Maximum % of required slots pre-filled for trader wrecks. |
+
+**Notes:**
+- A random integer percentage is picked in `[MinPercent, MaxPercent]` for each wreck individually.
+- When enough slots are being pre-filled and both raw-material and part slots exist for the wreck type, the selection guarantees **at least one raw-material slot and at least one part slot**.
+- Setting `MinPercent = MaxPercent = 0` for a type disables pre-filling for that wreck source without touching `Enabled`.
 
 ### Vehicle Model Lists
 
@@ -288,8 +311,21 @@ engine = { steel = 20, aluminum = 20, carbon = 10, rubber = 5 }
 | `Coords` | vec4 | World position + heading |
 | `SpawnRadius` | number | `lib.point` distance at which the ped is tracked/spawned |
 | `WreckDeliveryCoords` | vec4 | Where purchased wrecks are placed in the world |
-| `Skills.Enabled` | boolean | Show "Request Mission" option when `metaden-skills` is running |
-| `Skills.Missions` | table | Pool of mission IDs randomly assigned via the trader |
+| `Skills.Enabled` | boolean | Show "Request Mission" options when `metaden-skills` is running |
+| `Skills.Missions` | table | Pool of `{ id, title }` entries randomly assigned via the trader |
+
+**Trader interactions:**
+
+The trader ped exposes two ox_target actions:
+
+1. **Browse Wrecks** — opens a context menu listing purchasable wrecks from the model pool. When `Skills.Enabled = true` and `metaden-skills` is started, a **Request Mission** shortcut is also shown at the top of this menu.
+2. **Request Mission** — dedicated ped target option (also only shown when `Skills.Enabled = true` and `metaden-skills` is started).
+
+**Mission assignment behaviour:**
+
+- The server shuffles the `Skills.Missions` pool and selects the first mission the player does **not** already have active (checked against `metaden_player_missions` with `status = 'active'`).
+- If the player already holds every configured mission, they receive a notification and no duplicate is assigned.
+- The `Skills.Enabled` flag controls config-level visibility; actual runtime availability is always verified via `GetResourceState('metaden-skills')`.
 
 ### Currency Map (`CurrencyMap`)
 
@@ -314,191 +350,3 @@ CurrencyMap = {
 | `AdminModelCommand.AcePermission` | `metaden.restoration.admin` | Required ACE |
 | `AdminUiCommand.Name` | `restoration_admin` | Chat command to open the NUI admin panel |
 | `AdminUiCommand.AcePermission` | `metaden.restoration.admin` | Required ACE |
-
----
-
-
-## Configuration Notes
-
-`MaterialMenuSectionsByType` is the **only** section source for restoration menus.
-
-Required shape:
-- `Default = { ...sections }` — fallback for any type without an explicit override
-- Optional type overrides: `Car`, `Bike`, `Pickup`, `Van` (leave empty `{}` to inherit Default)
-
-Optional Skills Integration
----------------------------
-Scrap-search rewards can use `metaden-skills` and inventory tools/items to increase both:
-- chance to find a part
-- amount of material found when a part is not found
-
-Config path
-- `Config.SearchRewardModifiers`
-
-Fields
-- `Resource`:
-  - skills resource used for reads (default: `metaden-skills`)
-  - if not started, skill modifier becomes `0`
-- `Skills` (preferred):
-  - list of skill entries used for bonus calculation
-  - entry shape: `{ name = 'skill_key', multiplier = number }`
-  - each entry contributes `level(skill) * multiplier`
-  - supports multiple skills (for example `scrapping` + `education_engineering`)
-- `FlatBonus`:
-  - fixed value added after skill contributions
-- `ItemBonuses`:
-  - map of `itemName = bonus`
-  - supports decimal bonuses (for example `0.25`, `0.5`, `1.0`)
-  - each configured item adds bonus when player has at least one in inventory
-  - intended for small tool boosts like wrench/screwdriver
-- `MaxBonus`:
-  - cap for extra materials only (does not clamp part-find chance directly)
-
-Calculation flow
-1. Compute `itemModifier` from `ItemBonuses`.
-2. Compute `skillModifier` from `Skills`.
-3. Part-find roll uses:
-   - `CarPartChance + itemModifier + skillModifier`
-4. If the roll fails (material reward path):
-   - `baseAmount = random(MinAmount, MaxAmount)`
-   - `extra = min(itemModifier + skillModifier, SearchRewardModifiers.MaxBonus)`
-   - `finalAmount = floor(baseAmount + extra)`
-
-Behavior guarantees
-- `Skills` is the only skill-source config for search modifiers.
-- If `Resource` is unavailable, skill contribution is `0` and only item/base values apply.
-- No hard dependency on `noego-disassembling` is required.
-
-Example tuning
-- Conservative:
-  - `scrapping` multiplier `0.8`
-  - `education_engineering` multiplier `0.2`
-  - small item bonuses (`0.25` to `0.75` each)
-  - lower `MaxBonus` (`4`-`6`)
-- Generous:
-  - `scrapping` multiplier `1.0`
-  - `education_engineering` multiplier `0.35`
-  - stronger tool bonus for rare tools
-  - higher `MaxBonus` (`8`)
-
-
-Core Features
--------------
-- Multiple active restorations per player using:
-  - `MaxWrecksPerPlayer`
-  - `MaxWrecksByRole`
-- Weighted completion calculation:
-  - raw materials contribute `20%` (configurable via `ProgressWeights.RawMaterials`)
-  - parts contribute `80%` (configurable via `ProgressWeights.Parts`)
-- Engine hoist workflow can hook a wreck with required `engine_hoist`, spawn a visible hoist prop, move the wreck, and persist the wreck position on release.
-- Per-resource-start expiration cleanup using:
-  - `ExpirationDays`
-- Ownership is tracked by `ownerCitizenId` and unique wreck IDs.
-- Wreck lookup uses normalized coordinate keys for stable matching after movement.
-- Completion flow stores owned vehicle data through bridge vehicle APIs and then attempts world spawn.
-- Material/part logic enforces dependency order and progress-gated completion.
-- Optional rare model pool per wreck type:
-  - admins can add one-time models
-  - next restoration of that type consumes one queued model before fallback to `*Models` config lists
-- Persistent ranking stats:
-  - per-player total wrecks restored
-  - per-player total resource units added
-  - per-player, per-type (Car/Bike/Pickup/Van) breakdown for leaderboards
-- Mission stat integration with `metaden-skills`:
-  - publishes restoration activity counters usable in skill missions
-  - supports search, material-add, and completion-by-type mission tracking
-
-Admin UI
---------
-An in-game admin panel is available via `/restoration_admin`. Requires ACE permission `metaden.restoration.admin`.
-
-Build the UI before first use:
-```
-cd ui && npm install && npm run build
-```
-
-Pages:
-- **Model Pool** — manage purchasable wrecks: add/remove entries with wreck type, vehicle model, price, and currency.
-- **Missions** — assign a `metaden-skills` mission to a player by citizen ID.
-- **Player Stats** — per-player lookup and global leaderboard showing character names, dual progress bars, and a by-type breakdown chart.
-- **Active Wrecks** — monitor live wrecks, set map waypoints, and force-delete entries.
-
-Admin Command
--------------
-- Command: `/restoration_addmodel <car|bike|pickup|van> <modelName>`
-- Permission: ACE `metaden.restoration.admin` (configurable in `Config.AdminModelCommand.AcePermission`)
-- Behavior:
-  - inserts model into `veh_restoration_model_pool`
-  - model is unique per type while queued
-  - model is consumed (deleted) when selected for a new restoration
-
-Currency Map
-------------
-`Config.CurrencyMap` controls how the `currency` column in `veh_restoration_model_pool` is resolved at payment time:
-
-```lua
-CurrencyMap = {
-    cash = { value = 'money', item = true  },  -- ox_inventory item
-    bank = { value = 'bank',  item = false },   -- framework money account
-}
-```
-
-- `value` — the actual money type or item name passed to balance/deduct functions.
-- `item = true` — uses inventory item count and remove (for ox_inventory wallet cash).
-- `item = false` — uses framework money account (for bank balance).
-
-
-Inventory Integration
----------------------
-This resource now routes inventory operations through `metabridge`:
-- item count checks
-- metadata display registration
-- slot-aware metadata updates
-- slot-targeted item removal
-- item definition/weight lookups
-- create-item metadata hook registration
-
-No direct `exports.ox_inventory:*` calls are used in gameplay flow.
-
-Database
---------
-Use `database.sql` to create/update:
-- `veh_restoration_wrecks`
-- `veh_restoration_zones`
-- `veh_restoration_model_pool`
-- `veh_restoration_player_stats`
-- `veh_restoration_player_type_stats`
-
-Ranking Callbacks
------------------
-- `metaden-restoration:server:getPlayerRankingStats(targetCitizenId?)`
-  - If `targetCitizenId` is omitted, returns caller stats.
-  - Returns:
-    - `summary` (total wrecks + total resources)
-    - `byType` (per-type breakdown)
-- `metaden-restoration:server:getRankingLeaderboard(wreckType?, limit?)`
-  - `wreckType` optional (`car|bike|pickup|van`); omitted returns global leaderboard.
-  - `limit` optional (defaults to 10, clamped 1-100).
-
-Mission Stat Hooks (`metaden-skills`)
--------------------------------------
-When `metaden-skills` is running, this resource increments mission stats:
-
-- `restoration.search.total`
-- `restoration.search.type.<scrapType>`
-- `restoration.material.total`
-- `restoration.material.<materialKey>`
-- `restoration.restore.total`
-- `restoration.restore.type.<car|bike|pickup|van>`
-
-These map directly to `requiredStatsAndAmount` entries in `metaden-skills` mission definitions.
-
-Schema includes:
-- `ownerCitizenId`
-- `wreckKeyNormalized`
-- indexes for owner/key/updated timestamps
-
-Load Order
-----------
-Ensure the resource starts after `metabridge`, and `oxmysql`.
-

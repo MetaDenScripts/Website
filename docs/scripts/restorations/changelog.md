@@ -2,6 +2,48 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.2] - 2026-03-03
+
+### Fixed
+- **`CancelRestoration` wreck not deleted from world** (`client/restoration.lua`):
+  - The entity reference passed from the ox_target `onSelect` closure became stale after the 15-second `alertDialog` + `progressBar` await chain. The function now resolves the authoritative entity from `loadedWrecks[wreckId]` first, falling back to the closure-captured handle only if the table entry is absent.
+  - `loadedWrecks[wreckId]` was never set to `nil` after `DeleteEntity`, allowing zone re-entry to bypass the duplicate-spawn guard in `loadWreck` and recreate the prop. Now explicitly nilled.
+  - `OwnedWrecks[entity]` was never cleared, leaving a dead handle that could allow zone re-entry to queue another `requestLoadWreck`. Now explicitly nilled.
+  - `loadedZones[wreckId]` was removed via `:remove()` but not nilled, causing the `RemoveWreck` server event handler to call `:remove()` a second time on the already-dead zone object. Now nilled immediately after removal.
+  - `restorationData` was not cleared after cancellation, leaving stale ownership/progress state visible in `SetupTargetOptions` and `calculateProgress`. Now reset to `{}`.
+  - The server event was incorrectly referencing `restorationData.id` (outer upvalue, potentially stale at time of execution) instead of the `wreckId` parameter captured at call time.
+- **`CancelRestoration` animation hung indefinitely** (`client/restoration.lua`):
+  - The previous animation dict (`anim@melee@large_wpn@streamed@attack`) is a streamed dict that cannot be loaded in a normal `RequestAnimDict` loop. The `while not HasAnimDictLoaded do Wait(0) end` loop hung forever, blocking `TaskPlayAnim` and the `progressBar` call that follows, making the destroy flow appear completely unresponsive.
+  - Replaced with `mini@repair` / `fixing_a_ped` (the same reliable dict used elsewhere in this file).
+  - Added a 5-second timeout to the anim dict load loop, consistent with the model-loading pattern used throughout the file. `TaskPlayAnim` is now guarded on `HasAnimDictLoaded` so a timeout does not error.
+- **Metabridge callback race condition** (`fxmanifest.lua`):
+  - `@ox_lib/init.lua` and `ox_lib` dependency were removed in 0.4.0 as part of the full metabridge abstraction. However, without `lib` available in this resource's Lua state, `MetaBridgeClient.requestCallbackAwait` could not use the `lib.callback.await` fast path and fell through to `TriggerServerEvent('MetaBridge:invokeCallback', ...)`. Combined with the metabridge 1.0.4 fix (invokeCallback now silently returns on missing callbacks), callbacks now resolve correctly via the fallback path.
+  - Restored `'@ox_lib/init.lua'` as the first entry in `shared_scripts` and `'ox_lib'` to `dependencies` so `lib.callback.await / lib.callback.register` are used on both the client and server, bypassing the bridge event bus entirely for all callbacks.
+
+---
+
+## [0.4.1] - 2026-03-03
+
+### Added
+- **Pre-completion system** (`config.lua`, `server/server.lua`):
+  - When a new wreck is created, a random percentage of its required material/part slots are pre-filled with a random partial amount (between 1 and the required count for that slot).
+  - Trader-purchased wrecks use a higher configured percentage range than world wrecks, so bought wrecks feel more complete from the start.
+  - The slot selection always guarantees at least one raw-material slot **and** at least one part slot are included when enough slots are being pre-filled and both categories exist for the wreck type.
+  - Configured via `Config.PreCompletion`:
+    - `Enabled` — set to `false` to disable entirely.
+    - `WorldWreck  = { MinPercent = 0,  MaxPercent = 20 }` — wrecks started in the open world.
+    - `TraderWreck = { MinPercent = 20, MaxPercent = 50 }` — wrecks purchased from the trader.
+  - New internal helper `generatePrecompletedState(wreckType, minPercent, maxPercent)` on the server (not exported).
+- **Mission shortcut in Browse Wrecks menu** (`client/trader.lua`):
+  - A **Request Mission** entry is injected at the top of the Browse Wrecks context menu so players can request a mission without needing a separate ped interaction.
+  - Visibility is gated at menu-open time via `GetResourceState('metaden-skills') == 'started'` (in addition to `Config.TraderPed.Skills.Enabled`), so the option disappears automatically if the resource is not running.
+- **Mission deduplication** (`server/server.lua`):
+  - Before assigning a mission the server queries `metaden_player_missions` for all missions the player already has `active`.
+  - The candidate pool is shuffled and the first mission the player does **not** already hold is selected.
+  - If every configured mission is already active, the callback returns `{ success = false, reason = 'You already have all available missions active.' }` and the player is notified accordingly.
+
+---
+
 ## [0.4.0] - 2026-02-27
 
 ### Added
