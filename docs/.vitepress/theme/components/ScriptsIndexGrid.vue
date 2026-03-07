@@ -14,9 +14,7 @@ const sectionLinks: SectionLink[] = [
   { key: "changelog", label: "Changelog" }
 ];
 
-const scripts = [...(scriptsIndex.scripts as ScriptIndexItem[])].sort(
-  (left, right) => left.order - right.order || left.name.localeCompare(right.name)
-);
+const scripts = [...(scriptsIndex.scripts as ScriptIndexItem[])];
 
 function toRoute(path: string): string {
   return `/${path.replace(/\.md$/, "")}`;
