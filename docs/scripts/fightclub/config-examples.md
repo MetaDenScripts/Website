@@ -428,7 +428,7 @@ Config.FightLocations = {
             }
         }
     },
-    [16] = {
+    [16] = {  -- This is the prison
         Level = 1,
         EntryFee = 10,
         AllowAll = true,
@@ -456,7 +456,10 @@ Config.FightLocations = {
 }
 
 -- Consumables sold by the fightclub shop.
+-- This store only takes `pinksoap` as currency.
 -- Table key is internal id; item is display label; amount is quantity per purchase.
+-- Set Config.ShopEnabled to false to disable the shop entirely (ped will not spawn).
+Config.ShopEnabled = true
 Config.Shop = {
     ['bandage'] = {
         item = "Bandage",
@@ -468,6 +471,7 @@ Config.Shop = {
         price = 1,
         amount = 3,
     }, 
+    -- Add mroe items here
 }
 
 
@@ -491,6 +495,12 @@ Config.PrizeScaling = {
 
 -- Item used as currency for entry fees, prize payouts, and ban unblock repayments
 Config.Currency = "money"
+
+-- Global NPC opponent melee damage modifier for arena fights.
+-- Scales how hard arena NPC fighters hit the player. 1.0 = default, 0.5 = half damage, 2.0 = double.
+-- Can be overridden per-location by adding a DamageModifier key inside a Config.FightLocations entry.
+-- Example:  Config.FightLocations[1].DamageModifier = 0.8  (NPC hits 20% softer in that arena)
+Config.NPCFighterDamage = 1.0
 
 -- Soap item: earned as a random reward; used as shop currency and for unblocking bans
 Config.SoapItem = "pinksoap"
@@ -604,7 +614,7 @@ Config.Training.Experience = {
 Config.Training.InjuryChanceOnMatch = 10 -- 10%
 Config.Training.FatiguePerMatch = 30     -- Base fatigue per match
 Config.Training.MatchWinPrize = 100      -- Base prize for winning a match
-Config.Training.MatchPrizeMoneyType = "black_money"
+Config.Training.MatchPrizeMoneyType = "money"
 
 -- Passive fighter maintenance rules.
 Config.Training.HoursBeforeLosingStats = 48   -- Hours before stats start to decay

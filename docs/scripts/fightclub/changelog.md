@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2026-03-09
+
+### Added
+- **`Config.ShopEnabled` toggle** — new boolean in `config.lua` (default `true`). Set to `false` to prevent the shop seller NPC from spawning entirely.
+- **`Config.NPCFighterDamage` global modifier** — configurable melee damage multiplier (default `1.0`) applied to all NPC fight opponents via `SetAiMeleeWeaponDamageModifier`.
+- **Per-arena `DamageModifier` override** — each entry in `Config.FightLocations` now accepts an optional `DamageModifier` key that overrides the global `Config.NPCFighterDamage` for that specific arena.
+- **Fighter rest time display** — the ox_lib StatusMenu fatigue entry now shows a live countdown ("Resting — Time remaining: Xh Ym") when the fighter is resting, and is disabled to prevent double-resting.
+- **Rest confirmation dialog** — triggering rest now shows a `lib.alertDialog` confirmation with the computed rest duration from `Config.Training.RestTime` before committing.
+- **Rest badge in NUI** — FighterPage and StatsPage fighter panels now display a blue "Resting · Xh Ym" badge (with faBed icon) when the fighter is actively resting.
+- **`isPlayerFighter` client export** — `exports['metaden-fightclub']:isPlayerFighter(entity)` returns `true` if the given entity is the calling player's spawned companion fighter. Useful for blocking interactions (e.g. drug sales) with fighter peds from other resources.
+
+### Fixed
+- **Fighter no longer attacks its owner** — four-layer fix: all weapons are stripped on spawn, a dedicated `YOURFIGHTER` relationship group prevents aggression toward the owner, `gameEventTriggered` filters out the fighter ped, and weapons are re-stripped after combat assist.
+- **Discord webhook logging** — empty webhook URL now prints a console warning instead of silently failing; HTTP responses with error status codes are logged in red.
+
+---
+
 ## [1.1.1] - 2026-03-05
 
 ### Added

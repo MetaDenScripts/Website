@@ -189,6 +189,30 @@ local record = exports['metaden-fightclub']:GetPlayerFighting(source)
 
 ---
 
+## Client Exports
+
+### `isPlayerFighter(entity)`
+
+Returns whether the given entity handle is the calling player's spawned companion fighter.
+
+**Parameters**
+
+| Name | Type | Description |
+|---|---|---|
+| `entity` | number | Client entity handle (ped). |
+
+**Returns** — `boolean`
+
+```lua
+local isFighter = exports['metaden-fightclub']:isPlayerFighter(entity)
+if isFighter then
+    -- block interaction, e.g. prevent selling drugs to the fighter
+    return
+end
+```
+
+---
+
 ## Server Callbacks
 
 Registered via `ox_lib` and invoked client-side with `lib.callback.await`.
