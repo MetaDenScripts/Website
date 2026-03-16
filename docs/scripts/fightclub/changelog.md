@@ -2,6 +2,56 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.2] - 2026-03-16
+
+### Fixed
+- **Single-owner arena spectator spawning** — normal cage fights now designate the fighter who starts the match as the only client allowed to spawn the spectator ring and promoted opponent, preventing nearby players from creating duplicate crowd peds.
+- **Single-owner trained-fighter spawning** — trained-fighter NPC matches and player-vs-player fighter challenges now use one authoritative client to spawn the networked fight peds, which fixes duplicate fighter spawns when other players are nearby.
+- **Fight ped cleanup on finish/disconnect** — both arena fights and trained-fighter matches now register spawned network IDs with the server so cleanup runs reliably on win, loss, cancel, runaway, and owner disconnect.
+- **HP percentages now respect GTA death threshold** — fight HUD and trained-fighter result checks now treat health at or below `100` as defeated, preventing dead peds from showing misleading remaining-health percentages.
+
+### Changed
+- **Arena fight state is now server-tracked** — active cage fights now store owner and spawned entity state on the server instead of relying on each nearby client's local spectator table.
+- **Player-vs-player fighter authority now follows the challenger** — the challenger owns ped spawning and result authority for trained-fighter wagers, while the other participant receives cleanup/state handling only.
+
+---
+
+## [1.3.1] - 2026-03-10
+
+### Added
+- **Ready-health recovery timer** — trained fighters now persist a dedicated `health_recovery_time` value so the resource can show an exact countdown until the fighter is back to usable HP.
+- **Hurt status in fighter UI** — both the ox_lib trainer status menu and the React fighter panels now distinguish low-HP fighters from healthy fighters by showing a `Hurt` state plus the remaining heal timer.
+- **Companion take-out gating** — the "Take Fighter" action now checks the fighter's ready-health state and blocks taking out fighters that are still below the configured HP threshold.
+
+### Changed
+- **First aid now restores HP** — first aid still reduces injury recovery time, but it also restores `Config.Training.FirstAidHealthRestorePercent` of max HP and recalculates the ready-health timer.
+- **Training readiness messaging** — train/fight validation now tells players how long remains until their fighter is back to ready HP instead of only reporting a generic injury block.
+- **New recovery tuning keys** — `Config.Training.MinimumReadyHealth`, `Config.Training.HealthRecoverySecondsPerHp`, and `Config.Training.FirstAidHealthRestorePercent` were added for server-side balancing.
+
+### Notes
+- **Safe schema migration included** — resource start now ensures the `fighters.health_recovery_time` column exists on older installs.
+- **Default ready-health threshold remains 100 HP** — this preserves the existing gameplay expectation while making the recovery behavior much clearer to players.
+
+---
+
+## [1.3.0] - 2026-03-10
+
+### Added
+- **Admin overview dashboard** — `/fightclubadmin` now opens with an Overview section covering both the main fight-club system and the Train-a-Fighter system, including total earnings, XP, wins/losses, average level, injury/rest summaries, and top earners.
+- **Clickable fighter drill-down** — the admin Fighters roster now supports clicking a row to jump directly into Fighter Management with that owner's training-fighter state preloaded.
+- **Persistent trained-fighter earnings** — the `fighters` table now stores an `earnings` total used by the admin overview and training top-earner rankings.
+- **Immediate food healing options** — `Config.Training.Food` items can now optionally restore current HP instantly with flat `health`, percentage-based `health_percent`, or both.
+
+### Changed
+- **Train-a-Fighter payouts now update training earnings** — NPC match wins and player-vs-player wager wins increment the new trained-fighter `earnings` field.
+- **Admin UI navigation flow** — Fighter Management can still search by owner/citizen ID manually, but admins no longer need to type an ID when selecting a fighter from the list.
+
+### Notes
+- **Trained-fighter earnings are forward-only** — existing fighters start with `earnings = 0` when the new column is added. Historical training payouts are not backfilled.
+- **Safe schema migration included** — resource start now ensures the `fighters.earnings` column exists on older installs.
+
+---
+
 ## [1.2.0] - 2026-03-09
 
 ### Added
