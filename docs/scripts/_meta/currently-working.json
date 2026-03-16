@@ -1,8 +1,8 @@
 {
   "teaser": {
-    "title": "Busyness",
-    "description": "Keep you business busy with regular NPCs showing up and placing orders, custom menus for each business and stock management for when owners are not around and players still need to eat or use the business.",
+    "title": "Petty Crimes",
+    "description": "Engage in various petty crimes, from shoplifting to vehicle vandalism, add more interactions and small crime to your server - this will be a free and open source script.",
     "imageUrl": "/scripts-images/coming_soon.png",
-    "imageAlt": "metaden-busyness"
+    "imageAlt": "metaden-petty-crimes"
   }
 }

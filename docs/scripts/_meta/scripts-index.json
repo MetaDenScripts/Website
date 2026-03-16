@@ -1,6 +1,21 @@
 {
   "scripts": [
-      {
+    {
+      "id": "busyness",
+      "name": "Busyness",
+      "summary": "Turns ordinary job locations into interactive, revenue-generating businesses with NPC customers, employee management, deliveries and more!",
+      "storeUrl": "https://store.metadenscripts.com/package/busyness",
+      "addedAt": "2026-03-07",
+      "status": "active",
+      "imageUrl": "/scripts-images/busyness.png",
+      "sections": {
+        "api": "scripts/busyness/api.md",
+        "readme": "scripts/busyness/readme.md",
+        "config-examples": "scripts/busyness/config-examples.md",
+        "changelog": "scripts/busyness/changelog.md"
+      }
+    },
+    {
       "id": "fightclub",
       "name": "FightClub",
       "summary": "Step into the cage and prove yourself, train a fighter, bet on matches and climb the ranks to become the champion!",
@@ -15,7 +30,7 @@
         "changelog": "scripts/fightclub/changelog.md"
       }
     },
-      {
+    {
       "id": "restorations",
       "name": "Restorations",
       "summary": "Search for materials, refurbish the wrecks and components and get a brand new vehicle to drive around!",
