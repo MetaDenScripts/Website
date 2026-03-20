@@ -91,6 +91,21 @@
       }
     },
     {
+      "id": "pettycrimes",
+      "name": "Petty Crimes",
+      "summary": "Engage in various petty crimes, from shoplifting to vehicle vandalism, add more interactions and small crime to your server.",
+      "storeUrl": "https://store.metadenscripts.com/package/pettycrimes",
+      "addedAt": "2026-02-17",
+      "status": "active",
+      "imageUrl": "/scripts-images/pettycrimes.png",
+      "sections": {
+        "api": "scripts/pettycrimes/api.md",
+        "readme": "scripts/pettycrimes/readme.md",
+        "config-examples": "scripts/pettycrimes/config-examples.md",
+        "changelog": "scripts/pettycrimes/changelog.md"
+      }
+    },
+    {
       "id": "notepad",
       "name": "Notepad",
       "summary": "Free FD Laptop notes application with MySQL persistence.",
