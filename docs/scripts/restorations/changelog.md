@@ -2,6 +2,130 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.5] - 2026-03-22
+
+### Added
+- **Admin "Move to me" action** (`server/admin.lua`, `client/admin.lua`, `client/restoration.lua`, `ui/src/pages/ActiveWrecksPage.tsx`):
+  - New **Move** button on each row of the Active Wrecks admin page teleports a wreck to the admin's current position.
+  - Server callback `metaden-restoration:admin:moveWreck` updates DB coordinates (wrecks + zones) and broadcasts the change.
+  - New `metaden-restoration:client:RelocateWreck` event cleans up the old entity/zone and creates a fresh streaming zone at the new location.
+- **Styled CSS tooltips on admin action buttons** (`ui/src/pages/ActiveWrecksPage.tsx`):
+  - Replaced native `title` attributes with themed hover tooltips using Tailwind `group`/`group-hover` pattern.
+
+### Changed
+- **Crafting bench access logic** (`client/client.lua`, `server/server.lua`):
+  - Empty or nil `JobWhitelist` now means unrestricted access (previously blocked everyone).
+  - Server returns `-1` sentinel for scrapping level when `metaden-skills` is unavailable, allowing the client to skip the skill gate entirely.
+- **Entity tracking sync on hoist movement** (`client/restoration.lua`):
+  - `updateWreckLocation` now detects when `CreatePropIfNeeded` has replaced the entity handle and syncs `loadedWrecks`/`OwnedWrecks` tracking tables accordingly, deleting the old underground entity.
+
+### Fixed
+- **Hoist wreck not visible after placement** (`client/restoration.lua`):
+  - Hoist move updated the entity position but never recreated the streaming zone; the wreck was invisible until relog. `RelocateWreck` now handles full zone lifecycle.
+- **Wreck collision after hoist release** (`client/client.lua`):
+  - Corrected `ReleaseWreckFromHoist` to apply `SetEntityCollision` before `FreezeEntityPosition` to prevent the prop falling through the ground.
+- **`utils` nil global error** (`client/client.lua`):
+  - Fixed case mismatch — `utils.materialNameToItemName` → `Utils.materialNameToItemName` (shared export uses capital `U`).
+- **`buildLegacyWreckKey` nil in admin.lua** (`server/admin.lua`):
+  - Added local copies of `normalizeCoord`, `buildLegacyWreckKey`, and `buildNormalizedWreckKey` since `admin.lua` loads alphabetically before `server.lua`.
+- **Admin move wreck not spawning** (`client/restoration.lua`):
+  - `RemoveWreck` deleted both entity and zone but nothing recreated them. Replaced with `RelocateWreck` which cleans up and creates a fresh streaming zone.
+- **Duplicate wreck after hoist + admin move** (`client/restoration.lua`):
+  - Fixed Lua type mismatch: NUI sends `wreckId` as string but `OwnedWrecks` stores numbers — `tonumber()` normalization added.
+  - Removed if/else short-circuit that skipped `OwnedWrecks` sweep when `loadedWrecks` entry was found.
+
+### Removed
+- **`AdminModelCommand` config and `/restoration_addmodel` chat command** (`config.lua`, `server/server.lua`, `server/admin.lua`, `client/admin.lua`):
+  - Fully superseded by the Model Pool page in the admin UI.
+
+---
+
+## [0.4.4] - 2026-03-06
+
+### Added
+- **Trader Store** (`config.lua`, `server/server.lua`, `server/admin.lua`, `client/trader.lua`, `client/admin.lua`, `ui/`):
+  - New **Browse Store** target option on the trader ped — players can purchase parts and materials directly from the trader.
+  - Store items are stored in a new `veh_restoration_store_items` database table.
+  - Stock tracking with optional maximum stock and lazy restock: stock is topped up automatically the next time the store is opened (no background polling loop).
+  - Optional `condition` metadata — if set, sold items receive a `Condition` metadata tag (e.g. `condition = 75` → `{ Condition = '75%' }`).
+  - Seed items seeded on resource start from `Config.TraderPed.Store.Items` via `INSERT IGNORE` (item name is the unique key); all live values are managed in-game via the admin panel.
+  - `Store.Enabled` config flag — set `false` to completely hide the target option.
+  - Five new admin callbacks (`admin:getStoreItems`, `admin:addStoreItem`, `admin:updateStoreItem`, `admin:removeStoreItem`, `admin:restockStoreItem`) backed by the admin ACE check.
+  - New **Store** page in the admin NUI panel: summary stats (total items, unlimited-stock count, out-of-stock count), paginated table with stock badges, and per-row edit / manual-restock / delete actions.
+  - Migration SQL (`migrations/2026-03-06-store-items.sql`): `CREATE TABLE IF NOT EXISTS veh_restoration_store_items`.
+- **Data migration SQL** (`migrations/2026-03-06-material-keys-item-names.sql`):
+  - Converts legacy `veh_restoration_wrecks.state.materials` keys to new direct item-name keys.
+  - Covers legacy keys including `seats`, `axle`, `tires`, `sparkPlugs`, `oilPump`, `driveShaft`, `cylinderHead`, `batteryCables`, `fuelTank`, and `metal`.
+
+### Changed
+- **Hard cutover to direct item-name material keys** (`config.lua`, `shared/utils.lua`, `server/*.lua`, `client/restoration.lua`):
+  - Removed `MaterialToItemMap` indirection from restoration flow.
+  - Material keys now directly match inventory item names (for example `tire`, `sparkplugs`, `axleparts`, `oil_pump`, `metalscrap`).
+  - `ITEM_CONTRACT.Materials`, per-type requirement tables, stage transitions, and restoration section dependencies now use direct item keys.
+- **Currency picker simplified in admin UI** (`ui/src/pages/ModelPoolPage.tsx`, `ui/src/pages/StorePage.tsx`):
+  - Removed the hardcoded `Gold Coin (item)` preset from the currency selector.
+  - The three options are now: **Cash**, **Bank**, and **Item…** (free-text input for any inventory item name).
+
+### Breaking
+- Servers upgrading from pre-`0.4.4` must run the migration SQL before going live if they want to preserve active restoration progress.
+
+---
+
+## [0.4.3] - 2026-03-06
+
+### Added
+- **Trader Tips & FAQ menu** (`shared/trader_tips.lua`, `client/trader.lua`):
+  - Added a dedicated `Tips & FAQ` trader target option.
+  - Added a config-backed FAQ source file (`shared/trader_tips.lua`) exposed as `Config.TraderPed.Tips`.
+  - Tips are shown in a context menu and open into per-topic dialogs for readability.
+  - Seeded with guidance for:
+    - where to get an `engine_hoist`
+    - how to grab/move wrecks (tow truck + hoist flows)
+    - why adding materials can fail (missing item, unmet dependencies, item condition expectations)
+- **Context-aware restoration blocker hints** (`client/restoration.lua`):
+  - Material menu entries now show dynamic blocker hints (for example `Complete first: ...` or `Missing item: ...`).
+  - Selecting a blocked material now explains the exact reason instead of failing with a generic message.
+
+### Changed
+- **Item setup discoverability and contract centralization** (`config.lua`, `shared/utils.lua`, `server/server.lua`, `README.md`):
+  - Introduced `ITEM_CONTRACT` as the single naming contract for restoration materials/items.
+  - `Config.Materials`, `Config.MaterialToItemMap`, and `Config.RawMaterials` now derive from that contract.
+  - Added `Config.RequiredInventoryItems` and startup validation logging to detect config/inventory drift early.
+  - Documented item setup entrypoint and compatibility mapping (`tires` material -> `tire` inventory item).
+- **Flatbed release configuration surface** (`config.lua`, `README.md`):
+  - Added tunables for flatbed drop behavior and occupancy checks:
+    - `FlatbedDropDistanceBehind`
+    - `FlatbedDropClearanceRadius`
+    - `FlatbedDropCheckVehicles`
+    - `FlatbedDropCheckObjects`
+
+### Fixed
+- **Missing restoration-related inventory items** (`inventory/ox_inventory.lua`):
+  - Added missing `fiber` and `carbon` entries expected by config reward/crafting flows.
+  - Removed orphaned `iron` from this resource inventory set.
+- **Flatbed release false-positive blocking** (`client/client.lua`):
+  - Removed unreliable native occupancy call path that produced blocked releases in clear spaces.
+  - Reworked clearance checks to use deterministic nearby entity scans.
+- **Flatbed drop spawning under/inside tow truck** (`client/client.lua`):
+  - Drop position now uses a model-aware minimum behind-distance based on flatbed dimensions.
+  - Uses entity-relative world offset placement so drop consistently resolves behind the bed.
+- **Flatbed occupancy checks missing real collisions** (`client/client.lua`):
+  - Clearance now uses entity footprint radius from model dimensions (not just entity origin point distance).
+  - Object checks now evaluate all nearby objects instead of networked/mission-only filtering.
+
+### Upgrade Notes
+- **New config keys available**:
+  - `FlatbedDropDistanceBehind`
+  - `FlatbedDropClearanceRadius`
+  - `FlatbedDropCheckVehicles`
+  - `FlatbedDropCheckObjects`
+- **Trader FAQ content now lives in** `shared/trader_tips.lua` and is read as `Config.TraderPed.Tips`.
+- **Behavior change**: blocked restoration materials are now selectable to show precise guidance (dependencies/missing item) instead of silently appearing unavailable.
+- **Behavior change**: flatbed release now enforces occupancy checks and uses a model-aware drop point behind the truck.
+- **Recommended post-update check**: restart the resource and verify startup logs for item contract validation output.
+
+---
+
 ## [0.4.2] - 2026-03-03
 
 ### Fixed

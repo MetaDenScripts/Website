@@ -1,6 +1,6 @@
 # MetaDen Restorations API Reference
 
-## Server Callbacks
+### Server Callbacks
 
 All callbacks are registered via `MetaBridge.registerCallback` and invoked from the client with `MetaBridgeClient.requestCallbackAwait`.
 
@@ -165,7 +165,7 @@ Returns all zone records from `veh_restoration_zones`. Used by the client on res
 
 ---
 
-## Admin Callbacks
+### Admin Callbacks
 
 All admin callbacks require ACE permission `metaden.restoration.admin`.
 
@@ -179,10 +179,16 @@ All admin callbacks require ACE permission `metaden.restoration.admin`.
 | `metaden-restoration:admin:getPlayerStats` | `{ citizenId }` | Returns ranking stats for a specific citizen ID. |
 | `metaden-restoration:admin:getLeaderboard` | — | Returns the global leaderboard. |
 | `metaden-restoration:admin:assignMission` | `{ citizenId, missionId }` | Assigns a specific mission to a player. |
+| `metaden-restoration:admin:getStoreItems` | — | Returns all `veh_restoration_store_items` rows (runs lazy restock first). |
+| `metaden-restoration:admin:addStoreItem` | `{ item, label, price, currency, condition, stock, restockAmount, restockInterval }` | Inserts a new store item. |
+| `metaden-restoration:admin:updateStoreItem` | `{ id, label, price, currency, condition, maxStock, restockAmount, restockInterval }` | Updates an existing store item. |
+| `metaden-restoration:admin:removeStoreItem` | `{ id }` | Deletes a store item by row ID. |
+| `metaden-restoration:admin:restockStoreItem` | `{ id }` | Manually restocks a single item to its `maxStock` value. |
+| `metaden-restoration:admin:moveWreck` | `{ wreckId }` | Moves a wreck to the admin's current position, updating DB and broadcasting to all clients. |
 
 ---
 
-## Server Events
+### Server Events
 
 | Event | Direction | Description |
 |---|---|---|
@@ -193,12 +199,13 @@ All admin callbacks require ACE permission `metaden.restoration.admin`.
 | `metaden-restoration:server:getEngineHoist` | Client → Server | Gives the player one `engine_hoist` item if they have space. |
 | `metaden-restoration:server:restorePart` | Client → Server | Repairs a broken part at a crafting bench, consuming raw materials. |
 
-## Client Events
+### Client Events
 
 | Event | Direction | Description |
 |---|---|---|
 | `metaden-restoration:client:loadWreck` | Server → Client | Fires after a wreck is created or purchased; client spawns the prop and registers zones. |
 | `metaden-restoration:client:RemoveWreck` | Server → Client (broadcast) | Instructs all clients to delete a completed/cancelled wreck entity and zone. |
+| `metaden-restoration:client:RelocateWreck` | Server → Client (broadcast) | Cleans up the old entity/zone and creates a fresh streaming zone at new coordinates (used by admin move). |
 
 ---
 
@@ -211,17 +218,10 @@ Open with `/restoration_admin`. Requires ACE `metaden.restoration.admin`.
 | Page | Description |
 |---|---|
 | **Model Pool** | Add or remove purchasable wreck entries with type, model, price, and currency. |
+| **Store** | Manage trader store items: add, edit, delete, manually restock, and monitor stock levels. |
 | **Missions** | Assign a `metaden-skills` mission to any player by citizen ID. |
 | **Player Stats** | Per-player lookup and global leaderboard with character names, dual progress bars, and a by-type breakdown chart. |
-| **Active Wrecks** | Monitor all live wrecks, set a map waypoint to their location, or force-delete entries. |
-
-### Admin Command: `/restoration_addmodel`
-
-```
-/restoration_addmodel <car|bike|pickup|van> <modelName>
-```
-
-Inserts a one-time model into the pool. The model is unique per type while queued and is consumed (deleted) when the next restoration of that type begins. Works from the server console too.
+| **Active Wrecks** | Monitor all live wrecks, set a map waypoint to their location, move a wreck to the admin's position, or force-delete entries. |
 
 ---
 
@@ -322,6 +322,28 @@ Per-player, per-type breakdown used for leaderboards and profile charts.
 | `totalWrecksRestored` | Wrecks completed for this type |
 | `totalResourcesAdded` | Resources contributed for this type |
 | `updatedAt` | Last stat update time |
+
+### `veh_restoration_store_items`
+
+Trader store inventory. Seeded from `Config.TraderPed.Store.Items` on resource start.
+
+| Column | Type | Description |
+|---|---|---|
+| `id` | INT UNSIGNED AI PK | Auto-increment row ID |
+| `item` | VARCHAR(255) UNIQUE | Inventory item name (unique — seed uses `INSERT IGNORE`) |
+| `label` | VARCHAR(255) | Display name shown to players |
+| `price` | INT UNSIGNED | Cost per unit |
+| `currency` | VARCHAR(50) | `cash`, `bank`, or any item name, resolved via `CurrencyMap` |
+| `condition` | TINYINT UNSIGNED NULL | If set (0–100), sold item receives `{ Condition = 'N%' }` metadata |
+| `maxStock` | INT | Maximum stock count; `-1` = unlimited |
+| `currentStock` | INT | Units currently available |
+| `restockAmount` | INT UNSIGNED | Units added per restock cycle (`0` = auto-restock disabled) |
+| `restockInterval` | INT UNSIGNED | Seconds between auto-restock cycles (`0` = disabled) |
+| `lastRestockAt` | TIMESTAMP NULL | Timestamp of the last restock; `NULL` while never restocked |
+| `createdBy` | VARCHAR(255) | Citizen ID or `'seed'` / `'console'` of the creator |
+| `createdAt` | TIMESTAMP | Insertion time |
+
+**Restock behaviour:** Stock is replenished lazily — the `UPDATE` runs once when the store is opened, topping up every overdue interval in a single SQL statement. No background polling loop runs.
 
 ---
 

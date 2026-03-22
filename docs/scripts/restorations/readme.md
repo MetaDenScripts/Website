@@ -346,7 +346,5 @@ CurrencyMap = {
 
 | Key | Default | Description |
 |---|---|---|
-| `AdminModelCommand.Name` | `restoration_addmodel` | Chat command to add a queued rare model |
-| `AdminModelCommand.AcePermission` | `metaden.restoration.admin` | Required ACE |
 | `AdminUiCommand.Name` | `restoration_admin` | Chat command to open the NUI admin panel |
 | `AdminUiCommand.AcePermission` | `metaden.restoration.admin` | Required ACE |
