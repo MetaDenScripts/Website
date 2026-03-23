@@ -2,11 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
-# Changelog
 
-All notable changes to `metaden-busyness` will be documented in this file.
+## [1.1.0] - 2026-03-23
 
-The format follows Keep a Changelog and this project starts its documented release history at `1.0.0`.
+### Added
+
+- Crafting station system with in-world placeable stations, recipe management, ingredient requirements, and crafting animations.
+- Admin crafting controls for creating, updating, deleting, and renaming crafting stations and recipes.
+- Persistent `md_busyness_crafting_stations` and `md_busyness_crafting_recipes` tables for station and recipe state.
+- lb-phone custom app integration for managing businesses directly from the phone.
+- Phone-optimised mobile layout with bottom navigation, compact card-based views, and responsive grids for all management pages.
+- Loading, error, and not-employed states for the phone app.
+- Server-side proximity check for stock deposits — players must be within 5 units of the store to restock.
+- `Config.LbPhoneApp.Enabled` toggle to enable or disable lb-phone app registration.
+
+### Changed
+
+- Management data refresh now returns structured responses with explicit success/error states instead of raw payloads.
+
+### Fixed
+
+- Removed stale UI state leak from `management:refresh` callback that could block the in-world panel after using the phone app.
+
+---
 
 ## [1.0.0] - 2026-03-12
 

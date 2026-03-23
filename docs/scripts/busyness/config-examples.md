@@ -6,6 +6,12 @@ Config = {}
 -- Enable extra debug output and zone helpers while developing.
 Config.Debug = false
 
+-- lb-phone custom app settings.
+Config.LbPhoneApp = {
+    -- Set to false to prevent the lb-phone app from being registered.
+    Enabled = true,
+}
+
 -- Used by the React UI bridge and any resource-name-dependent callbacks.
 Config.ResourceName = 'metaden-busyness'
 
@@ -48,6 +54,28 @@ Config.StorePed = {
         Icon = 'fas fa-basket-shopping',
         -- ox_target label shown on the public storefront ped.
         Label = 'Browse Store',
+    },
+}
+
+-- Settings for admin-placed crafting stations.
+Config.CraftingStations = {
+    -- Maximum distance from the business management point where a station may be placed.
+    MaxPlacementDistance = 35.0,
+    Target = {
+        -- Interaction area radius for the crafting station.
+        Radius = 1.5,
+        -- ox_target interaction distance once inside the area.
+        Distance = 2.0,
+        Icon = 'fas fa-hammer',
+        Label = 'Make',
+    },
+    Preview = {
+        RayDistance = 8.0,
+        ImpactSize = 0.12,
+    },
+    CraftingAnimation = {
+        dict = 'mini@repair',
+        clip = 'fixing_a_player',
     },
 }
 
