@@ -90,6 +90,21 @@
         "changelog": "scripts/outdoors/changelog.md"
       }
     },
+      {
+      "id": "health-conditions",
+      "name": "Health Conditions",
+      "summary": "Persistent injury and condition tracking for serious medical RP, with self-reports, severity, body locations, and automatic damage detection",
+      "storeUrl": "https://store.metadenscripts.com/package/health-conditions",
+      "addedAt": "2026-02-17",
+      "status": "active",
+      "imageUrl": "/scripts-images/health_conditions.png",
+      "sections": {
+        "api": "scripts/health-conditions/api.md",
+        "readme": "scripts/health-conditions/readme.md",
+        "config-examples": "scripts/health-conditions/config-examples.md",
+        "changelog": "scripts/health-conditions/changelog.md"
+      }
+    },
     {
       "id": "pettycrimes",
       "name": "Petty Crimes",
