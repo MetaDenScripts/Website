@@ -7,10 +7,16 @@ All notable changes to this project are documented in this file.
 ### Fixed
 - **UI Performance**: Clicking +/- on material quantities or recipe amounts no longer triggers a server roundtrip. All quantity adjustments are now handled client-side in JavaScript, making interactions instant instead of 10-15 seconds per click.
 - **Hot-Reload Crash**: Replaced `require('server.utils')` with explicit load ordering in `fxmanifest.lua` and a global reference (`TailorUtils`). This fixes the "syntax error in server utils" that occurred on resource restart / hot-reload.
+- **Delivery Ped Not Spawning**: `CreatePed()` was called at distant pickup coordinates when the order was placed, but GTA silently culls entities far from all players. Rewrote `spawnDeliveryPed` to use `lib.points` proximity-based spawning — the ped is now created only when the player approaches within 80 units and despawned when they leave.
+- **Delivery Ped Not Targetable**: Replaced `addTargetSphereZone` (placed at raw config Z) with `addTargetLocalEntity` on the ped entity itself, so the interaction prompt always aligns with the actual ped position after ground placement.
+- **becomeTailor Crash**: Added nil guard for `getPlayer()` result in the `becomeTailor` server handler to prevent `attempt to index a nil value` when the player object is unavailable.
 - **Image Caching**: Added `itemImageCache` so `getItemImage()` results are cached across menu rebuilds, matching the existing `getItemLabel()` pattern.
 - **Empty Config Entries**: Added a nil-guard in `buildRecipeEntries` to skip empty `{}` placeholder entries in `TailorRecipes` (e.g. Accessories, Materials) that could produce broken UI cards.
 - **Config Typo**: Fixed `payckecks:addToPaycheck` → `paychecks:addToPaycheck` in `DeliveryPayment.event.name`.
 - **Unused Variable**: Removed dead `GetPlayer()` call in `server/utils.lua` `increaseExperience()`.
+
+### Added
+- **Warp Into Van Toggle**: New `Config.WarpIntoVan` option (default `true`). When disabled, the player is not warped into the delivery van on order or delivery start.
 
 ### Changed
 - **Quantity Controls**: The +/- buttons and quantity input are now fully handled in the NUI JavaScript layer. Native browser number input spinners have been removed (input changed to `type="text"` with `inputMode="numeric"`).
@@ -18,6 +24,7 @@ All notable changes to this project are documented in this file.
 - **Recipe Crafting**: The craft amount is read from the JS payload when "Craft" is clicked, rather than relying on Lua-side state that required a server callback to rebuild.
 - **Server Scripts Load Order**: `fxmanifest.lua` now uses explicit file ordering (`server/utils.lua`, `server/tailoring.lua`, `server/laptop.lua`) instead of the `server/*.lua` glob to guarantee correct initialization order.
 - **Experience Caching**: Sewing machine and materials station menus cache the player's experience data on first open, so subsequent quantity changes don't re-query the database.
+- **Delivery Ped Lifecycle**: Ped spawning/despawning is now managed via `lib.points` proximity triggers instead of a one-shot `CreatePed` call. Cleanup in `receiveOrderItems` removes the proximity point and sche
 
 ## [1.0.1] - 2026-02-24
 
