@@ -1,14 +1,113 @@
 # MetaDen Restorations Configuration
 
 ```lua
+local function toLookup(entries)
+    local lookup = {}
+    for _, entry in ipairs(entries) do
+        lookup[entry] = true
+    end
+
+    return lookup
+end
+
+-- Single source of truth for restoration item/material naming.
+-- If you need to change item keys, update this block first.
+local ITEM_CONTRACT = {
+    Materials = {
+        glass = 0,
+        plastic = 0,
+        rubber = 0,
+        aluminum = 0,
+        steel = 0,
+        metalscrap = 0,
+        carbon = 0,
+        -- Parts
+        seat = 0,
+        engine = 0,
+        sparkplugs = 0,
+        battery = 0,
+        axleparts = 0,
+        tire = 0,
+        oil = 0,
+        turbo = 0,
+        transmission = 0,
+        brakes = 0,
+        suspension = 0,
+        oil_pump = 0,
+        drive_shaft = 0,
+        cylinder_head = 0,
+        battery_cables = 0,
+        fuel_tank = 0,
+        hood = 0,
+        roof = 0,
+        bumper = 0,
+        exhaust = 0,
+        horn = 0,
+        rims = 0,
+        cardoor = 0,
+    },
+    RawMaterials = toLookup({
+        'metalscrap',
+        'aluminum',
+        'steel',
+        'glass',
+        'plastic',
+        'rubber',
+        'fiber',
+        'wires',
+        'copper',
+        'carbon',
+        'oil',
+        'sparkplugs',
+        'battery',
+    }),
+    -- Expected keys declared in inventory/ox_inventory.lua for this resource.
+    RequiredInventoryItems = toLookup({
+        'engine_hoist',
+        'steel',
+        'rubber',
+        'metalscrap',
+        'copper',
+        'aluminum',
+        'plastic',
+        'glass',
+        'wires',
+        'fiber',
+        'carbon',
+        'seat',
+        'sparkplugs',
+        'axleparts',
+        'tire',
+        'oil',
+        'transmission',
+        'brakes',
+        'suspension',
+        'oil_pump',
+        'drive_shaft',
+        'cylinder_head',
+        'battery_cables',
+        'fuel_tank',
+        'battery',
+        'engine',
+        'turbo',
+        'hood',
+        'roof',
+        'bumper',
+        'exhaust',
+        'horn',
+        'rims',
+        'cardoor',
+    }),
+}
+
 Config = {
     -- Radius for restoration streaming zones (client creates sphere zones per wreck).
     ZoneRadius = 20,
     -- Enables extra debug visuals/logging in supported client-side systems.
-    Debug = true,
+    Debug = false,
     -- Optional reputation gain when adding materials.
     ReputationAwards = {
-        Enabled = true,
+        Enabled = false,
         Chance = 30,
         Amount = 1,
         System = 'skills',
@@ -59,11 +158,6 @@ Config = {
     -- Example: mechanic = 3
     MaxWrecksByRole = {
         -- mechanic = 3,
-    },
-    -- Admin command for adding one-time model entries consumed by future restorations.
-    AdminModelCommand = {
-        Name = 'restoration_addmodel',
-        AcePermission = 'metaden.restoration.admin',
     },
     -- Command to open the admin NUI panel.
     AdminUiCommand = {
@@ -166,6 +260,12 @@ Config = {
     -- Target interaction distances for hoist/flatbed actions.
     HoistTargetDistance = 2.5,
     FlatbedReleaseDistance = 3.0,
+    -- Flatbed drop positioning/clearance checks.
+    -- If blocked, release is cancelled and player must reposition then retry.
+    FlatbedDropDistanceBehind = 5.0,
+    FlatbedDropClearanceRadius = 3.5,
+    FlatbedDropCheckVehicles = true,
+    FlatbedDropCheckObjects = true,
     -- Wreck/prop models used for interaction targets.
     WreckedVehicles = {
         `prop_rub_carwreck_2`,
@@ -222,78 +322,17 @@ Config = {
         BeginRestoration    = { enabled = true, label = 'Begin Restoration',    icon = 'fa-solid fa-chain'         },
         RestorePart         = { enabled = true, label = 'Restore Part',         icon = 'fa-solid fa-tools'         },
     },
+    -- Item setup entrypoint for this resource.
+    -- Materials / raw-material and required inventory keys are centralized
+    -- in ITEM_CONTRACT above to avoid drift between config and ox inventory data.
+    ItemContract = ITEM_CONTRACT,
     -- Base material state template used when a new restoration starts.
     -- Keep keys in sync with each vehicle type table below (Bike/Car/Pickup/Van).
-    Materials = {
-        glass = 0,
-        plastic = 0,
-        rubber = 0,
-        aluminum = 0,
-        steel = 0,
-        metal = 0,
-        carbon = 0,
-        -- Parts
-        seats = 0,
-        engine = 0,
-        sparkPlugs = 0,
-        battery = 0,
-        axle = 0,
-        tires = 0,
-        oil = 0,
-        turbo = 0,
-        transmission = 0,
-        brakes = 0,
-        suspension = 0,
-        oilPump = 0,
-        driveShaft = 0,
-        cylinderHead = 0,
-        batteryCables = 0,
-        fuelTank = 0,
-        hood = 0,
-        roof = 0,
-        bumper = 0,
-        exhaust = 0,
-        horn = 0,
-        rims = 0,
-        cardoor = 0,
-    },
-    -- Maps logical material keys to inventory item names.
-    -- Used both for consuming materials and displaying progress labels.
-    MaterialToItemMap = {
-        seats = 'seat',
-        sparkPlugs = 'sparkplugs',
-        axle = 'axleparts',
-        tires = 'tire',
-        oil = 'oil',
-        transmission = 'transmission',
-        brakes = 'brakes',
-        suspension = 'suspension',
-        oilPump = 'oil_pump',
-        driveShaft = 'drive_shaft',
-        cylinderHead = 'cylinder_head',
-        batteryCables = 'battery_cables',
-        fuelTank = 'fuel_tank',
-        metal = 'metalscrap',
-        battery = 'battery',
-    },
-    -- Optional reverse-map overrides when itemName->material resolution is ambiguous.
-    ItemToMaterialOverrides = {},
+    Materials = ITEM_CONTRACT.Materials,
+    -- Material keys now directly use inventory item names.
     -- Items treated as raw materials (no Condition metadata required for consumption).
-    RawMaterials = {
-        metalscrap = true,
-        aluminum = true,
-        steel = true,
-        glass = true,
-        plastic = true,
-        rubber = true,
-        fiber = true,
-        wires = true,
-        copper = true,
-        carbon = true,
-        oil = true,
-        sparkplugs = true,
-        battery = true,
-    },
+    RawMaterials = ITEM_CONTRACT.RawMaterials,
+    RequiredInventoryItems = ITEM_CONTRACT.RequiredInventoryItems,
     -- Model swap rules when specific material milestones complete.
     -- `model = '__current__'` means "do not swap model at this milestone".
     -- For those types, progression updates state/progress only until a later milestone swaps the prop.
@@ -301,28 +340,28 @@ Config = {
         Car = {
             cardoor = { stage = 'doors', model = `prop_rub_carwreck_11` },
             glass = { stage = 'glass', model = `prop_rub_carwreck_14` },
-            tires = { stage = 'last', model = `imp_prop_covered_vehicle_03a` },
+            tire = { stage = 'last', model = `imp_prop_covered_vehicle_03a` },
         },
         Pickup = {
             cardoor = { stage = 'doors', model = '__current__' },
             glass = { stage = 'glass', model = '__current__' },
-            tires = { stage = 'last', model = `imp_prop_covered_vehicle_04a` },
+            tire = { stage = 'last', model = `imp_prop_covered_vehicle_04a` },
         },
         Van = {
             cardoor = { stage = 'doors', model = '__current__' },
             glass = { stage = 'glass', model = '__current__' },
-            tires = { stage = 'last', model = `imp_prop_covered_vehicle_07a` },
+            tire = { stage = 'last', model = `imp_prop_covered_vehicle_07a` },
         },
         Bike = {
             cardoor = { stage = 'doors', model = '__current__' },
             glass = { stage = 'glass', model = `ratbike` },
-            tires = { stage = 'last', model = `prop_box_wood04a` },
+            tire = { stage = 'last', model = `prop_box_wood04a` },
         },
     },
     -- Optional UI label overrides for material names.
     MaterialLabelOverrides = {
         cardoor = 'Car Door',
-        metal = 'Metal Scrap',
+        metalscrap = 'Metal Scrap',
     },
     -- Restoration menu sections by wreck type.
     -- Resolution order in client menu builder:
@@ -342,7 +381,7 @@ Config = {
                     { material = 'rubber', workType = 'body', checkInventory = true },
                     { material = 'aluminum', workType = 'body', checkInventory = true },
                     { material = 'steel', workType = 'body', checkInventory = true, inventoryItem = 'steel' },
-                    { material = 'metal', workType = 'body', checkInventory = true },
+                    { material = 'metalscrap', workType = 'body', checkInventory = true },
                     { material = 'carbon', workType = 'body', checkInventory = true },
                 },
             },
@@ -352,13 +391,13 @@ Config = {
                 icon = 'fa-solid fa-tools',
                 definitions = {
                     { material = 'engine', workType = 'engine' },
-                    { material = 'cylinderHead', workType = 'engine', dependencies = { 'engine' } },
-                    { material = 'oilPump', workType = 'engine', dependencies = { 'engine' } },
+                    { material = 'cylinder_head', workType = 'engine', dependencies = { 'engine' } },
+                    { material = 'oil_pump', workType = 'engine', dependencies = { 'engine' } },
                     { material = 'transmission', workType = 'engine', dependencies = { 'engine' } },
-                    { material = 'sparkPlugs', workType = 'engine', dependencies = { 'engine' } },
+                    { material = 'sparkplugs', workType = 'engine', dependencies = { 'engine' } },
                     { material = 'turbo', workType = 'engine', dependencies = { 'engine' } },
                     { material = 'battery', workType = 'engine', dependencies = { 'engine' } },
-                    { material = 'oil', workType = 'engine', dependencies = { 'oilPump' } },
+                    { material = 'oil', workType = 'engine', dependencies = { 'oil_pump' } },
                 },
             },
             {
@@ -366,14 +405,14 @@ Config = {
                 title = 'Work on the Undercarriage',
                 icon = 'fa-solid fa-car',
                 definitions = {
-                    { material = 'axle', workType = 'under', checkInventory = true },
-                    { material = 'tires', workType = 'under', checkInventory = true, dependencies = { 'rims' } },
-                    { material = 'suspension', workType = 'under', checkInventory = true, dependencies = { 'axle' } },
-                    { material = 'driveShaft', workType = 'under', checkInventory = true, dependencies = { 'suspension', 'transmission' } },
+                    { material = 'axleparts', workType = 'under', checkInventory = true },
+                    { material = 'tire', workType = 'under', checkInventory = true, dependencies = { 'rims' } },
+                    { material = 'suspension', workType = 'under', checkInventory = true, dependencies = { 'axleparts' } },
+                    { material = 'drive_shaft', workType = 'under', checkInventory = true, dependencies = { 'suspension', 'transmission' } },
                     { material = 'exhaust', workType = 'under', checkInventory = true },
-                    { material = 'fuelTank', workType = 'under', checkInventory = true },
+                    { material = 'fuel_tank', workType = 'under', checkInventory = true },
                     { material = 'brakes', workType = 'under', checkInventory = true, dependencies = { 'suspension' } },
-                    { material = 'batteryCables', workType = 'engine', checkInventory = true, dependencies = { 'battery' } },
+                    { material = 'battery_cables', workType = 'engine', checkInventory = true, dependencies = { 'battery' } },
                 },
             },
             {
@@ -393,7 +432,7 @@ Config = {
                 title = 'Work on the Interior',
                 icon = 'fa-solid fa-couch',
                 definitions = {
-                    { material = 'seats', workType = 'body', checkInventory = true },
+                    { material = 'seat', workType = 'body', checkInventory = true },
                     { material = 'horn', workType = 'body', checkInventory = true },
                 },
             },
@@ -404,14 +443,14 @@ Config = {
                 title = 'Work on the Undercarriage',
                 icon = 'fa-solid fa-car',
                 definitions = {
-                    { material = 'axle', workType = 'under', checkInventory = true },
-                    { material = 'tires', workType = 'under', checkInventory = true, dependencies = { 'rims', 'cardoor', 'glass' } },
-                    { material = 'suspension', workType = 'under', checkInventory = true, dependencies = { 'axle' } },
-                    { material = 'driveShaft', workType = 'under', checkInventory = true, dependencies = { 'suspension', 'transmission' } },
+                    { material = 'axleparts', workType = 'under', checkInventory = true },
+                    { material = 'tire', workType = 'under', checkInventory = true, dependencies = { 'rims', 'cardoor', 'glass' } },
+                    { material = 'suspension', workType = 'under', checkInventory = true, dependencies = { 'axleparts' } },
+                    { material = 'drive_shaft', workType = 'under', checkInventory = true, dependencies = { 'suspension', 'transmission' } },
                     { material = 'exhaust', workType = 'under', checkInventory = true },
-                    { material = 'fuelTank', workType = 'under', checkInventory = true },
+                    { material = 'fuel_tank', workType = 'under', checkInventory = true },
                     { material = 'brakes', workType = 'under', checkInventory = true, dependencies = { 'suspension' } },
-                    { material = 'batteryCables', workType = 'engine', checkInventory = true, dependencies = { 'battery' } },
+                    { material = 'battery_cables', workType = 'engine', checkInventory = true, dependencies = { 'battery' } },
                 },
             },
         },
@@ -426,26 +465,26 @@ Config = {
         rubber = 500,
         aluminum = 200,
         steel = 200,
-        metal = 200,
+        metalscrap = 200,
         carbon = 100,
         -- Parts
         rims = 2,
-        seats = 2,
+        seat = 2,
         engine = 1,
-        sparkPlugs = 4,
+        sparkplugs = 4,
         battery = 1,
-        axle = 1,
-        tires = 2,
+        axleparts = 1,
+        tire = 2,
         oil = 1,
         turbo = 1,
         transmission = 1,
         brakes = 2,
         suspension = 2,
-        oilPump = 1,
-        driveShaft = 2,
-        cylinderHead = 1,
-        batteryCables = 1,
-        fuelTank = 1,
+        oil_pump = 1,
+        drive_shaft = 2,
+        cylinder_head = 1,
+        battery_cables = 1,
+        fuel_tank = 1,
         hood = 0,
         roof = 0,
         bumper = 0,
@@ -460,26 +499,26 @@ Config = {
         rubber = 6000,
         aluminum = 500,
         steel = 1000,
-        metal = 3000,
+        metalscrap = 3000,
         carbon = 500,
         -- Parts
         rims = 4,
-        seats = 4,
+        seat = 4,
         engine = 1,
-        sparkPlugs = 4,
+        sparkplugs = 4,
         battery = 1,
-        axle = 2,
-        tires = 4,
+        axleparts = 2,
+        tire = 4,
         oil = 1,
         turbo = 1,
         transmission = 1,
         brakes = 4,
         suspension = 4,
-        oilPump = 1,
-        driveShaft = 2,
-        cylinderHead = 1,
-        batteryCables = 1,
-        fuelTank = 1,
+        oil_pump = 1,
+        drive_shaft = 2,
+        cylinder_head = 1,
+        battery_cables = 1,
+        fuel_tank = 1,
         hood = 1,
         roof = 1,
         bumper = 2,
@@ -494,26 +533,26 @@ Config = {
         rubber = 6000,
         aluminum = 500,
         steel = 1000,
-        metal = 3000,
+        metalscrap = 3000,
         carbon = 500,
         -- Parts
         rims = 4,
-        seats = 4,
+        seat = 4,
         engine = 1,
-        sparkPlugs = 4,
+        sparkplugs = 4,
         battery = 1,
-        axle = 2,
-        tires = 4,
+        axleparts = 2,
+        tire = 4,
         oil = 1,
         turbo = 1,
         transmission = 1,
         brakes = 2,
         suspension = 2,
-        oilPump = 1,
-        driveShaft = 2,
-        cylinderHead = 1,
-        batteryCables = 1,
-        fuelTank = 1,
+        oil_pump = 1,
+        drive_shaft = 2,
+        cylinder_head = 1,
+        battery_cables = 1,
+        fuel_tank = 1,
         hood = 1,
         roof = 1,
         bumper = 2,
@@ -528,26 +567,26 @@ Config = {
         rubber = 7000,
         aluminum = 1000,
         steel = 2000,
-        metal = 4000,
+        metalscrap = 4000,
         carbon = 1000,
         -- Parts
         rims = 4,
-        seats = 4,
+        seat = 4,
         engine = 1,
-        sparkPlugs = 4,
+        sparkplugs = 4,
         battery = 1,
-        axle = 2,
-        tires = 4,
+        axleparts = 2,
+        tire = 4,
         oil = 1,
         turbo = 1,
         transmission = 1,
         brakes = 2,
         suspension = 2,
-        oilPump = 1,
-        driveShaft = 2,
-        cylinderHead = 1,
-        batteryCables = 1,
-        fuelTank = 1,
+        oil_pump = 1,
+        drive_shaft = 2,
+        cylinder_head = 1,
+        battery_cables = 1,
+        fuel_tank = 1,
         hood = 1,
         roof = 1,
         bumper = 2,
@@ -575,7 +614,6 @@ Config = {
         -- If the player has an item count > 0, its bonus is added.
         -- Supports fractional values (for example 0.25, 0.5).
         ItemBonuses = {
-            WEAPON_SCREWDRIVER = 1,
             WEAPON_WRENCH = 1,
             WEAPON_HAMMER = 1,
             anglegrinder = 5,
@@ -593,7 +631,6 @@ Config = {
                 'rims',
                 'axleparts',
                 'engine',
-                'sparkplugs',
                 'drive_shaft',
                 'cylinder_head',
                 'fuel_tank',
@@ -601,8 +638,12 @@ Config = {
                 'horn',
                 'suspension',
                 'transmission',
+                'turbo',
+                'brakes',
+                'oil_pump',
+                'battery_cables',
             },
-            materials = { 'aluminum', 'steel', 'glass', 'plastic', 'rubber', 'fiber', 'wires', 'copper' },
+            materials = { 'aluminum', 'steel', 'glass', 'plastic', 'rubber', 'fiber', 'wires', 'copper', 'metalscrap', 'carbon', 'oil', 'battery', 'sparkplugs' },
         },
         exhaust = {
             parts = { 'exhaust' },
@@ -657,7 +698,7 @@ Config = {
             carbon = 10,
             rubber = 5,
         },
-        axle = {
+        axleparts = {
             steel = 20,
             metalscrap = 10,
             rubber = 30,
@@ -685,29 +726,29 @@ Config = {
             rubber = 20,
             metalscrap = 20,
         },
-        oilPump = {
+        oil_pump = {
             steel = 30,
             aluminum = 10,
             rubber = 200,
             metalscrap = 50,
         },
-        driveShaft = {
+        drive_shaft = {
             steel = 50,
             aluminum = 20,
             rubber = 10,
             metalscrap = 10,
         },
-        cylinderHead = {
+        cylinder_head = {
             steel = 30,
             aluminum = 5,
             metalscrap = 20,
         },
-        batteryCables = {
+        battery_cables = {
             wires = 50,
             rubber = 50,
             metalscrap = 10,
         },
-        fuelTank = {
+        fuel_tank = {
             steel = 30,
             plastic = 20,
         },
@@ -753,6 +794,11 @@ Config = {
         tire = {
             rubber = 50,
             wires = 20,
+        },
+        seat = {
+            fiber = 30,
+            plastic = 20,
+            rubber = 10
         }
     },
 
@@ -792,6 +838,41 @@ Config = {
                 { id = 'restoration_restore_1_bike',   title = 'First Bike Rebuild' },
                 { id = 'restoration_restore_5_cars',   title = 'Classic Rebuilder' },
                 { id = 'restoration_fix_1_door',       title = 'Panel Beater' },
+            },
+        },
+
+        -- Item store: the trader sells individual parts/materials directly to players.
+        -- Items listed here are seeded into the database on resource start (INSERT IGNORE by
+        -- item name), so they will only be inserted if no row with that item name exists yet.
+        -- All live stock values, prices, and restock settings can be adjusted in-game via
+        -- the Admin UI "Store" page.
+        --
+        -- Fields:
+        --   item            (string)  – inventory item name (must match ox_inventory definition)
+        --   label           (string)  – optional display name; defaults to humanized item key
+        --   price           (number)  – cost per unit
+        --   currency        (string)  – 'cash', 'bank', or any item name (same as model pool)
+        --   condition       (number|nil) – if set (0-100), sold item receives Condition metadata
+        --                                  (e.g. condition=75 → { Condition = '75%' })
+        --   stock           (number)  – initial & max stock; -1 = unlimited
+        --   restockAmount   (number)  – units added per restock cycle (0 = never auto-restock)
+        --   restockInterval (number)  – seconds between restock cycles (0 = disabled)
+        Store = {
+            -- Set to false to completely hide the "Browse Store" option from the trader ped.
+            Enabled = true,
+
+            -- Seed items.  Each entry is inserted once when the resource starts.
+            -- Once in the DB the admin panel is the source of truth.
+            Items = {
+                -- Set stock to -1 for unlimited availability, and restockAmount/Interval to 0 to disable auto-restocking.
+                { item = 'engine_hoist',        label = 'Engine Hoist',    price = 1500, currency = 'cash', condition = nil, stock = -1, restockAmount = 0, restockInterval = 0     },
+                { item = 'battery',             label = 'Battery',         price = 250,  currency = 'cash', condition = nil, stock = 10, restockAmount = 3, restockInterval = 86400 },
+                { item = 'sparkplugs',          label = 'Spark Plugs',     price = 120,  currency = 'cash', condition = nil, stock = 15, restockAmount = 5, restockInterval = 43200 },
+                -- Example entries (uncomment and adjust to taste):
+                -- { item = 'engine',       label = 'Engine',       price = 8000, currency = 'cash', condition = 75,  stock = 3,  restockAmount = 1, restockInterval = 7200  },
+                -- { item = 'transmission', label = 'Transmission', price = 5000, currency = 'cash', condition = 80,  stock = 5,  restockAmount = 2, restockInterval = 3600  },
+                -- { item = 'turbo',        label = 'Turbo Kit',    price = 3500, currency = 'cash', condition = nil, stock = -1, restockAmount = 0, restockInterval = 0     },
+                -- { item = 'metalscrap',   label = 'Metal Scrap',  price = 50,   currency = 'cash', condition = nil, stock = 50, restockAmount = 10, restockInterval = 1800 },
             },
         },
     },

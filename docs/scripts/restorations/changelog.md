@@ -2,6 +2,27 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.4.6] - 2026-03-30
+
+### Added
+- **Missing scrap search rewards** (`config.lua`):
+  - Added `turbo`, `brakes`, `oil_pump`, `battery_cables` to `ScrapSearchRewards.vehicle.parts`.
+  - Added `metalscrap`, `carbon`, `oil` to `ScrapSearchRewards.vehicle.materials`.
+- **Trader Store seed items** (`config.lua`):
+  - `battery` ($250, stock 10, +3 every 24 h) and `sparkplugs` ($120, stock 15, +5 every 12 h) added to `TraderPed.Store.Items`.
+
+### Fixed
+- **Restoration progress resetting to 0%** (`client/restoration.lua`):
+  - `beginRestoration` callback handler now uses a local variable for the server response instead of overwriting the `restorationData` cache, which caused error responses to wipe valid state.
+  - `calculateProgress()` now guards against nil `restorationData.state` and `.materials`, preventing Lua errors that silently reset displayed progress.
+  - `GenerateMenuForRepair()` now validates that `restorationData.wreckType` exists in Config before building the menu, preventing nil-index crashes on stale data.
+- **Hoist-released wreck has no collision** (`client/client.lua`):
+  - `ReleaseWreckFromHoist` now deletes the corrupted entity and spawns a fresh prop via `CreateObject` at the release position. 
+- **`battery` and `sparkplugs` dropping as broken parts** (`config.lua`):
+  - Moved both from `ScrapSearchRewards.vehicle.parts` to `vehicle.materials`. Both are raw materials (`ITEM_CONTRACT.RawMaterials`) and should not receive `Condition` metadata when looted from scrap searches.
+
+---
+
 ## [0.4.5] - 2026-03-22
 
 ### Added
