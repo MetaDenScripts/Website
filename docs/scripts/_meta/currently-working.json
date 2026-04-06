@@ -1,8 +1,8 @@
 {
   "teaser": {
-    "title": "Ladies of the Night",
-    "description": "Recruit and manage ladies of the night. Station them around the city, keep them healthy and happy, and collect their earnings — all through an in-game custom UI panel.",
+    "title": "Treasure",
+    "description": "Find treasures hidden across the city and claim your rewards, dig holes and hide your valuables.",
     "imageUrl": "/scripts-images/coming_soon.png",
-    "imageAlt": "metaden-ladies-of-the-night"
+    "imageAlt": "metaden-treasure"
   }
 }

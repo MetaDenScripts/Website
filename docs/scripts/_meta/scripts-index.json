@@ -1,5 +1,20 @@
 {
   "scripts": [
+      {
+      "id": "ladiesofthenight",
+      "name": "Ladies of the Night",
+      "summary": "Run an underground operation like no other. Recruit women from across the city, manage their well-being, station them in profitable districts, and grow your influence.",
+      "storeUrl": "https://store.metadenscripts.com/package/ladies-of-the-night",
+      "addedAt": "2026-04-06",
+      "status": "active",
+      "imageUrl": "/scripts-images/ladiesofthenight.png",
+      "sections": {
+        "api": "scripts/ladies-of-the-night/api.md",
+        "readme": "scripts/ladies-of-the-night/readme.md",
+        "config-examples": "scripts/ladies-of-the-night/config-examples.md",
+        "changelog": "scripts/ladies-of-the-night/changelog.md"
+      }
+    },
     {
       "id": "busyness",
       "name": "Busyness",
