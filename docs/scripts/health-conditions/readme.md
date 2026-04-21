@@ -60,12 +60,17 @@ All settings are in `config.lua`:
 | `Config.MaxSelfConditions` | `10` | Max active self-reported conditions |
 | `Config.AuthorizedJobs` | `{ ambulance = 0, police = 0 }` | Jobs allowed to set conditions on others |
 | `Config.DamageDetection.Enabled` | `true` | Enable automatic damage-to-condition detection |
-| `Config.DamageDetection.Cooldown` | `30` | Cooldown in seconds per body location before another auto-condition |
-| `Config.DamageDetection.MaxAutoConditions` | `8` | Max active auto-detected conditions per player |
+| `Config.DamageDetection.Cooldown` | `10` | Cooldown in seconds per body location before another auto-condition |
+| `Config.DamageDetection.MaxAutoConditions` | `20` | Max active auto-detected conditions per player |
 | `Config.DamageDetection.WeaponGroupToCategory` | See config | Maps weapon group hashes to categories such as melee, pistol, rifle, or explosion |
 | `Config.DamageDetection.SharpMeleeWeapons` | See config | Marks specific melee weapons as `sharp_melee` instead of generic melee |
 | `Config.DamageDetection.SeverityExpiry` | See config | Expiry hours per severity for auto-detected conditions |
 | `Config.DamageTypeMap` | See config | Maps damage categories to condition presets, severity, and description |
+| `Config.UI.Position` | `center` | Screen position of the panel — `center`, `left`, or `right` |
+| `Config.UI.Width` | `780` | Base panel width in pixels (minimum 400) |
+| `Config.UI.MaxHeight` | `85` | Maximum panel height as a percentage of viewport height (clamped 60–95) |
+| `Config.UI.Scale` | `1.0` | Uniform scale multiplier for the entire panel (clamped 0.5–2.0) |
+
 
 ## Damage Detection
 

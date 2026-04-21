@@ -3,7 +3,7 @@
 ```lua
 Config = {}
 
-Config.Debug = true
+Config.Debug = false
 
 -------------------------------------------------------------------------------
 --  GENERAL
@@ -226,4 +226,25 @@ Config.Severities = {
     { key = "severe",   label = "Severe" },
 }
 
+-------------------------------------------------------------------------------
+--  UI
+-------------------------------------------------------------------------------
+-- Controls the size and screen position of the health conditions panel.
+Config.UI = {
+    -- Horizontal position of the panel.
+    -- Accepted values: 'center', 'left', 'right'
+    Position  = 'center',
+
+    -- Base width of the panel in pixels.
+    -- Clamped to a minimum of 400px in the UI.
+    Width     = 780,
+
+    -- Maximum height of the panel as a percentage of the viewport height.
+    -- Clamped to the range [60, 95].
+    MaxHeight = 85,
+
+    -- Scale multiplier applied to the panel (1.0 = no scaling).
+    -- Clamped to the range [0.5, 2.0].
+    Scale     = 1.0,
+}
 ```

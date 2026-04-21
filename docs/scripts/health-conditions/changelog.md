@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.1] - 2026-04-21
+
+### Added
+- Collapsible body diagram and conditions panels — each section can be toggled independently, with the other expanding to fill the freed space
+- When the conditions panel is hidden the outer UI panel shrinks to fit only the body diagram, with a smooth animated width transition
+- Compact header layout activates when only the body diagram is visible — title and eye icon remain on the first row, and action buttons are arranged in a horizontal row beneath them
+- Re-open button appears in the body panel header when the conditions panel is collapsed, giving a visible tap target to restore it alongside clicking a body region
+- `Config.UI` block for controlling the panel's on-screen presentation:
+  - `Position` — place the panel at `'center'`, `'left'`, or `'right'` of the screen
+  - `Width` — base panel width in pixels (minimum 400)
+  - `MaxHeight` — maximum panel height as a percentage of viewport height (clamped 60–95)
+  - `Scale` — uniform scale multiplier for the entire panel (clamped 0.5–2.0)
+- Mutual collapse guard on both panels — either panel can always expand, but neither can collapse while the other is already collapsed, preventing a state where both panels are hidden simultaneously
+
+--- 
+
+## [1.0.0] - 2026-03-24
+
 ### Added
 - Third-eye player inspection via ox_target — examine other players to see their physical conditions
 - Custom NUI panel with player mugshot (via MugShotBase64) and condition card list
